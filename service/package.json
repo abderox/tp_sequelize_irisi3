@@ -1,0 +1,28 @@
+{
+  "name": "BOOKS-project",
+  "version": "1.0.0",
+  "description": "BOOKS project backend part ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "keywords": [
+    "rest",
+    "node",
+    "express"
+  ],
+  "author": "abdelhadi",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "fs-extra": "^10.1.0",
+    "j-mapper": "^1.0.0",
+    "nodemon": "^2.0.20",
+    "path": "^0.12.7",
+    "pg": "^8.8.0"
+  }
+}
