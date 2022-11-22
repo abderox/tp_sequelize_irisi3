@@ -340,6 +340,56 @@ const createClient = async (req, res) => {
 }
 
 
+const updateOrder = async(req, res) => {
+    try {
+        const { status , orderId } = req.body;
+
+        const order = await Order.findOne({
+            where: { id: orderId }
+        })
+
+        if(order.status === "PENDING"){
+            const book = await Book.
+            findOne({
+                where: { id: order.book_id }
+            })
+
+            if(book.units < order.units){
+                return res.status(400).json({
+                    message: "units not available"
+                })
+            }
+
+            await Order.update({
+                status
+            }, {
+                where: { id: orderId }
+            })
+
+            await Book.update({
+
+                units: book.units - order.units
+
+            }, {
+                where: { id: order.book_id }
+            })
+
+            return res.status(200).json({
+                message: "order updated successfully"
+            })
+
+        }else{
+            return res.status(400).json({
+                message: "order already updated"
+            })
+        }
+
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
+
 
 module.exports = {
     getAllBooks,
@@ -352,5 +402,6 @@ module.exports = {
     getAllGenres,
     createOrder,
     getAllOrders,
-    createClient
+    createClient,
+    updateOrder
 };
