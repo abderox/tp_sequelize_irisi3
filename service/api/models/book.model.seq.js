@@ -25,6 +25,11 @@ const Book = sequelize.define('Book',
         type: DataTypes.STRING,
         allowNull: true,
         unique: false,
+    },
+    storage : {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        unique: false,
     }
 
 },{

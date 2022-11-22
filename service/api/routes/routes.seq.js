@@ -9,27 +9,30 @@ const {
     deleteBook,
     uploadProfileImage,
     downloadCover,
-    getAllGenres
+    getAllGenres,
+    createOrder,
+    getAllOrders,
+    createClient
 } = require("../controllers/bookery.controller");
 
-
-// const {
-//     uploadProfileImage,
-//     downloadCover
-// } = require("../controllers")
-
-
-// router.post("/upload", uploadProfileImage);
-// router.get("/download/:cover", downloadCover);
+// import middlewares
+const { 
+    verifyToken,
+    isAdmin,
+    isBuyer 
+} = require("../middlewares/auth");
 
 router.get("/", getAllBooks);
 router.get("/:id", getBookById);
-router.post("/", createBook);
-router.put("/:id", updateBook);
-router.delete("/:id", deleteBook);
-router.post("/upload", uploadProfileImage);
+router.post("/", [verifyToken,isAdmin],createBook);
+router.put("/:id",[verifyToken,isAdmin], updateBook);
+router.delete("/:id",[verifyToken,isAdmin], deleteBook);
+router.post("/upload",[verifyToken,isAdmin], uploadProfileImage);
 router.get("/download/:cover", downloadCover);
 router.get("/genres", getAllGenres);
+router.post("/order",[verifyToken,isBuyer], createOrder);
+router.get("/orders/all",[verifyToken,isAdmin], getAllOrders);
+router.post("/client/create", createClient);
 
 
 module.exports = router;

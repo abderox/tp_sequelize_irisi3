@@ -1,8 +1,10 @@
 const Book = require('../models/book.model.seq');
 const Genre = require('../models/category.model.seq');
 const Edition = require('../models/edition.model.seq');
+const Order = require('../models/command.model');
 const path = require('path');
-const fs = require('fs-extra')
+const fs = require('fs-extra');
+const User = require('../models/user.model');
 
 const getAllBooks = async (req, res) => {
     console.log("🚀 ~ file: bookery.controller.js ~ line 100 ~ getAllBooks ~ req")
@@ -14,55 +16,32 @@ const getAllBooks = async (req, res) => {
             }],
         });
 
-        const genres=[]
+        const genres = []
         const genres_ = await Genre.findAll();
-      
-            genres_.forEach((genre) => {
-                // console.log("🚀 ~ file: bookery.controller.js ~ line 21 ~ getAllBooks ~ genre", genre)
-                console.log("🚀 ~ file: bookery.controller.js ~ line 21 ~ getAllBooks ~ genre", genre.name)
-                console.log("🚀 ~ file: bookery.controller.js ~ line 21 ~ getAllBooks ~ genre", genre.id)
-                
-                genres.push({
-                    id: genre.id,
-                    name: genre.name
-                })
+
+        genres_.forEach((genre) => {
+            // console.log("🚀 ~ file: bookery.controller.js ~ line 21 ~ getAllBooks ~ genre", genre)
+            console.log("🚀 ~ file: bookery.controller.js ~ line 21 ~ getAllBooks ~ genre", genre.name)
+            console.log("🚀 ~ file: bookery.controller.js ~ line 21 ~ getAllBooks ~ genre", genre.id)
+
+            genres.push({
+                id: genre.id,
+                name: genre.name
+            })
 
 
 
-            });
-            console.log("🚀 ~ file: bookery.controller.js ~ line 21 ~ getAllBooks ~ genres", genres)
+        });
+        console.log("🚀 ~ file: bookery.controller.js ~ line 21 ~ getAllBooks ~ genres", genres)
 
-            // const books_= books.reduce(
-            //     (acc, book) => {
-            //         const genre = genres.find((genre) => genre.id === book.genre_id);
-            //         const editions
-            //         console.log("🚀 ~ file: bookery.controller.js ~ line 21 ~ getAllBooks ~ genre", genre)
-            //         console.log("🚀 ~ file: bookery.controller.js ~ line 21 ~ getAllBooks ~ genre", genre.name)
-            //         console.log("🚀 ~ file: bookery.controller.js ~ line 21 ~ getAllBooks ~ genre", genre.id)
-            //         acc.push({
-            //             id: book.id,
-            //             title: book.title,
-            //             genre: genre.name,
-            //             genre_id: genre.id,
-            //             description: book.description,
-            //             couverture: book.couverture,
-            //             edition_date: edition.edition_date,
-            //             maison_edition: edition.maison_edition,
-            //         });
-            //         return acc;
-            //     },
-            //     []
-            // ) 
+        res.status(200).json({
+            books: books,
+            genres: genres
+        });
 
-            
-            res.status(200).json({
-                books: books,
-                genres: genres
-            });
-       
 
-    
-       
+
+
     } catch (error) {
         res.status(500).json(error);
     }
@@ -74,7 +53,7 @@ const getBookById = async (req, res) => {
         const book = await Book.findByPk(req.params.id, {
             include: [{
                 model: Genre,
-            },{
+            }, {
                 model: Edition,
             }],
         });
@@ -92,7 +71,7 @@ const createBook = async (req, res) => {
         delete req.body.genre;
 
         console.log(req.body)
-        
+
         const edition = {}
         edition.date_parutiion = req.body.edition_date;
         edition.maison_edition = req.body.maison_edition;
@@ -110,7 +89,7 @@ const createBook = async (req, res) => {
         //create genre if not exists
         //setgenre
         console.log(genre[0].id)
-     
+
 
         await book.setGenre(genre[0].id);
 
@@ -143,23 +122,23 @@ const updateBook = async (req, res) => {
         delete req.body.edition_date;
         delete req.body.maison_edition;
 
-          //create genre if not exists
+        //create genre if not exists
         const genre = await Genre.findOrCreate({
             where: { name: genrename },
             //limit one
             limit: 1,
         });
 
- 
+
         console.log(genre[0].id)
         console.log(req.params.id)
         req.body.genre = genre[0].id
         const book = await Book.update(req.body, {
-           
+
             where: { id: req.params.id },
         });
-    
-       
+
+
         res.status(200).json({
             message: "updated successfully"
         });
@@ -174,7 +153,7 @@ const updateBook = async (req, res) => {
 
 
     } catch (error) {
-            
+
         res.status(200).json({
             message: "updated successfully"
         });
@@ -189,7 +168,7 @@ const deleteBook = async (req, res) => {
             where: { id: req.params.id },
         });
         res.status(200).json({
-            message  : "deleted successfully"
+            message: "deleted successfully"
         });
     } catch (error) {
         res.status(500).json(error);
@@ -235,10 +214,10 @@ const uploadProfileImage = async (req, res) => {
 
 
 const downloadCover = async (req, res) => {
-    
-    const file = path.join(process.cwd(),'covers', req.params.cover);
+
+    const file = path.join(process.cwd(), 'covers', req.params.cover);
     console.log("🚀 ~ file: profile.controller.js ~ line 100 ~ downloadAvatar ~ file", file)
-   
+
     const fileExists = await fs.existsSync(file);
     if (fileExists) {
 
@@ -269,6 +248,99 @@ const getAllGenres = async (req, res) => {
 }
 
 
+const createOrder = async (req, res) => {
+    try {
+
+        //check if req.body.book is array
+        if (Array.isArray(req.body.books)) {
+
+            req.body.books.forEach(async (book) => {
+
+                const { date } = req.body;
+
+                const getBookById = await Book.findByPk(book.id);
+                const book_ = getBookById.dataValues;
+
+                //compare unitS
+                if (book_.units < book.units) {
+                    return res.status(400).json({
+                        message: "units not available"
+                    })
+                }
+
+                const order = await Order.create({
+                    status: "PENDING",
+                    date,
+                    units: book.units
+                });
+
+                order.setBook(book.id);
+                order.setUser(req.body.userId);
+            });
+            return res.status(201).json({
+                message: "order created successfully"
+            });
+        }
+
+
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
+
+const getAllOrders = async (req, res) => {
+    try {
+        const orders = await Order.findAll({
+            include: [
+                {
+                    model: Book,
+                    as: "Book",
+                    attributes: ["titre", "couverture", "price", "storage"],
+                    include: [
+                        {
+                            model: Genre,
+                            as: "Genre",
+                            attributes: ["name"]
+                        },
+                        {
+                            model: Edition,
+                            as: "Editions",
+                            attributes: ["date_parutiion", "maison_edition"]
+                        }
+                    ]
+                },
+                {
+                    model: User,
+                    as: "User",
+                    attributes: ["username", "email"]
+                }
+            ]
+        });
+        res.status(200).json(orders);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
+}
+
+const createClient = async (req, res) => {
+    try {
+        const { nom, prenom, phone, address , email} = req.body;
+        const client = await User.findOrCreate
+            ({
+                where: { phone },
+                defaults: { nom, prenom, phone, address ,email}
+            });
+
+        res.status(201).json(client);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
+
+
 module.exports = {
     getAllBooks,
     getBookById,
@@ -277,5 +349,8 @@ module.exports = {
     deleteBook,
     uploadProfileImage,
     downloadCover,
-    getAllGenres
+    getAllGenres,
+    createOrder,
+    getAllOrders,
+    createClient
 };

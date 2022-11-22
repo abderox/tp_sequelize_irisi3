@@ -2,10 +2,12 @@ const express = require("express");
 const fileUpload = require('express-fileupload');
 const cors = require("cors");
 // const init = require("./api/init");
+const cookieSession = require("cookie-session");
 const sequelize = require("./api/config/db.seq");
 const initial =  require('./api/init/initSeq')
 // const plantsRoutes = require("./api/routes");
 const booksRoutes = require("./api/routes/routes.seq");
+const authRoutes = require("./api/routes/auth.seq")
 
 const app = express();
 
@@ -33,6 +35,15 @@ app.use((req, res, next) => {
   });
 
 
+  app.use(
+    cookieSession({
+      name: "bookery-session",
+      secret: "COOKIE_SECRET", 
+      httpOnly: true,
+    })
+  );
+
+
 // (async () => {
 //     await init();
 // })();
@@ -45,6 +56,7 @@ app.use((req, res, next) => {
       // sequelize.sync({ force: true }).then(() => {
           sequelize.sync({ force: false }).then(() => {
           console.log('Database synchronized');
+          initial();
       }
       );
   }).catch((error) => {
@@ -57,10 +69,12 @@ app.get("/", (req, res) => {
     res.json({ message: "testing routes" });
 });
 
+app.use("/api/auth", authRoutes);
 
 app.use(fileUpload());
 // app.use("/api/books", plantsRoutes);
 app.use("/api/books", booksRoutes);
+
 
 
 
