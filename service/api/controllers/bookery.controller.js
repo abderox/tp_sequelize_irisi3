@@ -333,7 +333,7 @@ const createClient = async (req, res) => {
                 defaults: { nom, prenom, phone, address ,email}
             });
 
-        res.status(201).json(client);
+        res.status(200).json(client);
     } catch (error) {
         res.status(500).json(error);
     }

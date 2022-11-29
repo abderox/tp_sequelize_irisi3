@@ -28,7 +28,7 @@ const signin = (req, res) => {
         }).then(async (user) => {
             await checkAuth(req, res, user);
         }).catch(err => {
-            res.status(500).send({ message: err.message });
+            res.status(404).send({ message: "Credentials are incorrect" });
         });
     }
 }
@@ -73,7 +73,7 @@ const checkAuth = async (req, res, user) => {
         username: user.username,
         email: user.email,
         authorities ,
-        message: "Login Successful",
+        accessToken: token,
     });
 
 }

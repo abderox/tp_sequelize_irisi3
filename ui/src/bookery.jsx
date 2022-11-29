@@ -4,6 +4,10 @@ import axios from 'axios';
 import Badge from 'react-bootstrap/Badge';
 import InfoModal from './modal';
 import EditModal from './modalEdit'
+import OrderModel from './createOrder';
+import authHeader from './authHeader';
+
+
 
 function Bookery() {
 
@@ -12,16 +16,23 @@ function Bookery() {
     const [genres, setgenres] = useState([]);
     const [show, setShow] = useState(false);
     const [show_, setShow_] = useState(false);
+    const [show__, setShow__] = useState(false);
     const [data, setdata] = useState([]);
     const [search,setsearch] = useState([]);
+    const [admin,setAdmin] = useState(false);
     const imageURL = "http://localhost:8085/api/books/download/"
 
 
     useEffect(() => {
+        // check local storage user roles
+        const user = JSON.parse(localStorage.getItem('admin'));
+        if (user) {
+            if (user?.authorities?.includes("ROLE_ADMIN")) {
+                setAdmin(true);
+            }
+        }
+        
         setloading(true);
-
-
-
         axios.get('http://localhost:8085/api/books')
             .then(res => {
                 console.log(res)
@@ -45,7 +56,6 @@ function Bookery() {
 
 
     const refresh = (e) => {
-        e.preventDefault();
         setloading(true);
         axios.get('http://localhost:8085/api/books')
             .then(res => {
@@ -82,7 +92,8 @@ function Bookery() {
 
     const handledelete = (e, id) => {
         e.preventDefault();
-        axios.delete(`http://localhost:8085/api/books/${id}`)
+        axios.delete(`http://localhost:8085/api/books/${id}`,
+            { headers: authHeader() })
             .then(res => {
                 refresh();
             })
@@ -92,6 +103,9 @@ function Bookery() {
         setShow_(id);
     }
 
+    const handleOpenModalOrder= (e,id) => {
+        setShow__(id);
+    }
 
     const handleSort = (e) => {
         const keyword = e.target.value;
@@ -120,7 +134,7 @@ function Bookery() {
                 </div>
                 <div className="row  justify-content-center">
 
-                    <div className="col-1">
+                    <div className="col">
                         <button className="btn btn-secondary"><img src="https://img.icons8.com/external-sbts2018-solid-sbts2018/28/FFFFFF/external-reset-basic-ui-elements-2.2-sbts2018-solid-sbts2018.png"
                             onClick={
                                 refresh
@@ -146,7 +160,7 @@ function Bookery() {
                         </select>
 
                     </div>
-                    <div className="col-2">
+                    <div className={admin ? 'col-2' : 'col-3'}>
                         <select className="form-control pt-1"
                             onChange={handleSort}
                         >
@@ -155,12 +169,12 @@ function Bookery() {
                             <option value="desc">Descending</option>
                         </select>
                     </div>
-                    <div className="col-1">
+                    {admin && <div className="col-1">
                         <button style={{ all: 'unset', cursor: 'pointer' }}
                             onClick={handleOpenModal}
                             className="text-center"><img src="https://img.icons8.com/fluency/48/000000/plus-math.png" alt="add" /></button>
                         {show && <InfoModal />}
-                    </div>
+                    </div>}
                 </div>
 
                 <div className=" justify-content-center">
@@ -189,22 +203,34 @@ function Bookery() {
                                         <p className="card-text pt-1" style={{ color: 'green', fontWeight: 'bold'}}>{book?.price || "no price"} MAD</p>
                                         <p className="card-text pt-1" style={{ maxHeight: '5rem', overflowY: 'scroll' }}>{book?.description || "no description"}</p>
                                         <div className="d-flex justify-content-center">
-                                            <button style={{ all: 'unset', cursor: 'pointer' }}
+                                            {admin && <button style={{ all: 'unset', cursor: 'pointer' }}
                                                 onClick={(e) => { handledelete(e, book.id) }}
                                                 key={book.id + book?.titre}
                                             >
                                                 <img src="https://img.icons8.com/color/28/000000/trash--v1.png" />
-                                            </button>
-                                            <button style={{
+                                            </button>}
+                                            
+                                            {admin && <button style={{
                                                 all: 'unset', cursor: 'pointer',
                                                
                                             }} key={book.id + book.price}
                                                 onClick={(e) => { handleOpenModalEdit(e, book.id) }}
                                             >
                                                 <img src="https://img.icons8.com/arcade/28/000000/pencil.png" />
-                                            </button>
+                                            </button>}
                                             {
                                                 show_ === book.id && <EditModal id={book.id} key={book.id} />
+                                            }
+                                            <button style={{
+                                                all: 'unset', cursor: 'pointer',
+                                               
+                                            }} key={book.id + book.price}
+                                                onClick={(e) => { handleOpenModalOrder(e,book.id) }}
+                                            >
+                                                <img src="https://img.icons8.com/cute-clipart/28/null/shopping-basket-success.png" />
+                                            </button>
+                                            {
+                                                show__ === book.id && <OrderModel title={book.titre} key={book.id} book={book.id} store={book.storage}  />
                                             }
                                         </div>
                                     </div>

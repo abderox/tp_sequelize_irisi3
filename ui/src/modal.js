@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button } from 'react-bootstrap';
 import Badge from 'react-bootstrap/Badge';
 import axios from 'axios';
+import authHeader from './authHeader';
 
 export default function InfoModal() {
 
@@ -31,7 +32,7 @@ export default function InfoModal() {
             delete dataToSend.genre_
         }
 
-        await axios.post('http://localhost:8085/api/books/', dataToSend)
+        await axios.post('http://localhost:8085/api/books/', dataToSend , { headers: authHeader() })
             .then(res => {
                 setloading(false);
                 handleClose();
@@ -44,7 +45,7 @@ export default function InfoModal() {
         const formData = new FormData();
         formData.append('file', file);
 
-        await axios.post('http://localhost:8085/api/books/upload', formData)
+        await axios.post('http://localhost:8085/api/books/upload', formData , { headers: authHeader() })
             .then(res => {
                console.log(res.data)
             })
