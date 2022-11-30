@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 
-export default function OrderModel({ title, book, store }) {
+export default function OrderModel({ title, book, store, price_ }) {
 
 
     const navigate = useNavigate();
@@ -15,6 +15,7 @@ export default function OrderModel({ title, book, store }) {
     const handleShow = () => setShow(true);
     const [loading, setloading] = useState(false);
     const [leftstore, setleftstore] = useState(0);
+    const [price, setprice] = useState(0);
     const [dataToSend, setdataToSend] = useState({
         userId: 0,
         date: '',
@@ -33,7 +34,7 @@ export default function OrderModel({ title, book, store }) {
         // check user in local storage
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) {
-            navigate('/register', 
+            navigate('/register',
                 { state: { from: '/' } });
         }
 
@@ -64,12 +65,14 @@ export default function OrderModel({ title, book, store }) {
 
         const store_ = parseInt(store);
         const units_ = parseInt(v || 0);
+        const price__ = parseFloat(price_ || 0);
         console.log(store_)
         console.log(units_)
         console.log(store_ - units_)
 
         if (store_ > units_) {
             setleftstore(store_ - units_);
+            setprice(price__ * units_);
         }
         else {
             setleftstore(store);
@@ -142,9 +145,9 @@ export default function OrderModel({ title, book, store }) {
                                     fontSize: '12px',
                                     fontWeight: 'bold',
                                 }}
-                            >{leftstore} books left in store</small>
+                            >{leftstore} books will be left in store</small>
                         </div>
-                        <div classNam="row mt-2 p-1 ">
+                        <div classNam="row mt-2 mb-2 p-1 ">
                             <div className="col">
                                 <label
                                     className=" mt-1 p-1"
@@ -161,6 +164,59 @@ export default function OrderModel({ title, book, store }) {
                                         dataToSend.units
                                     }
                                 />
+
+                            </div>
+                        </div>
+                        <div classNam="row mt-2 p-1 ">
+                            <div className="col">
+
+                                <label
+                                    className=" mt-1 p-1 "
+                                    htmlFor="thisone_2"
+                                    style={{
+                                        color: 'gray',
+                                        marginTop : '10px',
+                                        fontSize: '16px',
+                                        fontWeight: 'bold',
+                                    }}
+                                >
+                                    price*units : {price_+"*"+(dataToSend.units||0)}
+                                </label>
+                            </div>
+                        </div>
+                        <div classNam="row mt-2 p-1 ">
+
+
+                            <div className="col"
+                                style={{
+                                    marginTop: '20px',
+                                    backgroundColor: '#ffddd2',
+                                    fontWeight: 'bold',
+                                    fontSize: '20px',
+                                    textAlign: 'center',
+                                    borderRadius: '5px'
+                                }}
+                            >
+                                <label
+                                    className=" mt-1 p-1 "
+                                    htmlFor="cost_"
+
+                                >
+                                    #Total price :
+                                </label>
+
+                                <input type="text"
+                                    id="cost_"
+                                    style={{ all: 'unset', color: 'green', fontWeight: 'bold', width: "20%" }}
+                                    placeholder="Price" name="price"
+                                    value={price}
+                                    disabled
+                                />
+                                <label
+                                    className=" mt-1 p-1 text-success"
+                                >
+                                    MAD
+                                </label>
 
                             </div>
                         </div>

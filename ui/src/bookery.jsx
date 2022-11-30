@@ -122,7 +122,7 @@ function Bookery() {
 
     return (
 
-        <div className="">
+        <div >
 
 
             <div className="d-block justify-content-center mt-2">
@@ -132,17 +132,22 @@ function Bookery() {
                         <h1 className="text-center display-4 text-success fw-bold title-header" >Majorel books</h1>
                     </div>
                 </div>
-                <div className="row  justify-content-center">
+                <div className="row  justify-content-center m-4" style={{
+                      backgroundColor: 'white',
+                      borderRadius: '10px',
+                      padding: '20px',
+                      boxShadow: '0 0 10px 0 rgba(0,0,0,0.2)'
+                }}>
 
-                    <div className="col">
-                        <button className="btn btn-secondary"><img src="https://img.icons8.com/external-sbts2018-solid-sbts2018/28/FFFFFF/external-reset-basic-ui-elements-2.2-sbts2018-solid-sbts2018.png"
+                    <div className="col-2 col-md  col-lg pt-2 ">
+                        <button style={{ all: 'unset', cursor: 'pointer' }}
                             onClick={
                                 refresh
-                            }
-                        /></button>
+                            }>
+                        <img src="https://img.icons8.com/ios-filled/36/7950F2/update-left-rotation.png" alt="reset"/></button>
                     </div>
 
-                    <div className="col-4">
+                    <div className="col-10 col-md-4 col-lg-4 pt-2">
                         <input type="text" className="form-control" placeholder="Search by title" name="search" value={search} 
                         onChange={
                             handleSearch
@@ -150,7 +155,7 @@ function Bookery() {
                         />
 
                     </div>
-                    <div className="col-4">
+                    <div className="col-12 col-md-4 col-lg-4 pt-2">
                         <select onChange={handleSelectCategory} className="form-control pt-1">
                             <option value="All">All</option>
                             {!loading && genres.map((genre, index) => {
@@ -160,7 +165,7 @@ function Bookery() {
                         </select>
 
                     </div>
-                    <div className={admin ? 'col-2' : 'col-3'}>
+                    <div className={admin ? 'col-md-2 col-lg-2 col-12 pt-2' : 'col-12 col-md-3 col-lg-3 pt-2'}>
                         <select className="form-control pt-1"
                             onChange={handleSort}
                         >
@@ -169,7 +174,7 @@ function Bookery() {
                             <option value="desc">Descending</option>
                         </select>
                     </div>
-                    {admin && <div className="col-1">
+                    {admin && <div className="col-md-1 col-lg-1 col-12 mt-1">
                         <button style={{ all: 'unset', cursor: 'pointer' }}
                             onClick={handleOpenModal}
                             className="text-center"><img src="https://img.icons8.com/fluency/48/000000/plus-math.png" alt="add" /></button>
@@ -177,18 +182,39 @@ function Bookery() {
                     </div>}
                 </div>
 
+                <div className="row justify-content-center">
+                    <hr
+                        style={{
+                            color: '#7950F2',
+                            backgroundColor: '#7950F2',
+                            height: 5,
+                            width: '95%',
+                            borderRadius: 5
+                        }}
+                    />
+                </div>
+
                 <div className=" justify-content-center">
                    
                         <div className="col-12 p-3" style={{ 
+
                             display: 'grid',
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
                             gridGap: '1rem',
-                            gridAutoRows: 'minmax(100px, auto)'
+                            gridAutoRows: 'minmax(100px, auto)',
+                            borderRadius: '5px',
+                            backgroundColor: 'white',
+                            borderRadius: '10px',
+                            padding: '20px',
+                            boxShadow: '0 0 10px 0 rgba(0,0,0,0.2)',
+                            padding: '20px',
+                            marginBottom: '20px'
 
                         }}>
                             {!loading && data.map((book) => (
 
-                                <div className="card p-3 m-1  " key={book?.id} style={{ width: '18rem', height: '32rem', fontSize: '13px', borderColor: 'green' }}>
+                                <div className="card p-3 m-1  " key={book?.id} style={{  height: '32rem', fontSize: '13px', border: '2px solid #7209b7' , background: '#ffffff',
+                                boxShadow:  '26px 26px 52px #ededed, -26px -26px 52px #ffffff' }}>
                                     <div className="card-body text-center ">
                                         <img src={
                                             imageURL + book?.couverture
@@ -227,10 +253,10 @@ function Bookery() {
                                             }} key={book.id + book.price}
                                                 onClick={(e) => { handleOpenModalOrder(e,book.id) }}
                                             >
-                                                <img src="https://img.icons8.com/cute-clipart/28/null/shopping-basket-success.png" />
+                                                <img src="https://img.icons8.com/fluency-systems-filled/32/7950F2/favorites.png" alt="save"/>
                                             </button>
                                             {
-                                                show__ === book.id && <OrderModel title={book.titre} key={book.id} book={book.id} store={book.storage}  />
+                                                show__ === book.id && <OrderModel title={book.titre} key={book.id} book={book.id} store={book.storage} price_={book.price} />
                                             }
                                         </div>
                                     </div>
@@ -243,11 +269,7 @@ function Bookery() {
 
                  
                 </div>
-                {/* <div className="d-flex justify-content-center mt-2">
-                    <div className="">
-                        <button onClick={() => setPlantss(plants)} className="btn btn-secondary"><img src="https://img.icons8.com/external-sbts2018-solid-sbts2018/32/FFFFFF/external-reset-basic-ui-elements-2.2-sbts2018-solid-sbts2018.png" /></button>
-                    </div>
-                </div> */}
+              
 
             </div>
         </div>
