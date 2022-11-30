@@ -70,11 +70,11 @@ const Register = () => {
                 boxShadow: '0 0 10px 0 rgba(0,0,0,0.2)'
 
             }}>
-                <h1 className="
+                <h4 className="
             text-center
             mb-4
             
-            ">Register</h1>
+            ">These infos are required for delivery purposes</h4>
 
                 <form>
                     <div className="form-group" >
@@ -115,9 +115,9 @@ const Register = () => {
                         <small id="addressHelp" className="form-text text-muted">We'll never share your address with anyone else.</small>
                     </div>
 
-                    <div className="d-flex text-center justify-content-center ">
+                    <div className=" text-center  ">
                         {/* long button*/}
-                        <button type="submit" className="btn btn-success btn-lg btn-block" onClick={formSubmit}>submit</button>
+                        <button type="submit" className="btn btn-success  btn-block" onClick={formSubmit}>submit</button>
 
                     </div>
                 </form>

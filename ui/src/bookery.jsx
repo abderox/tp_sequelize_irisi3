@@ -104,7 +104,8 @@ function Bookery() {
     }
 
     const handleOpenModalOrder= (e,id) => {
-        setShow__(id);
+        e.preventDefault();
+            setShow__(id);
     }
 
     const handleSort = (e) => {
@@ -222,9 +223,12 @@ function Bookery() {
                                             style={{
                                                 width: '100%',
                                                 height: '15rem',
+                                                borderRadius: '8px',
+                                                boxShadow: '0 0 10px 0 rgba(0,0,0,0.2)'
+
                                             }}
                                         />
-                                        <h5 className="card-title ">{book?.titre || "no titre"} </h5>
+                                        <h5 className="card-title pt-2">{book?.titre || "no titre"} </h5>
                                         <h6 className="card-subtitle  text-muted">{book?.Genre.name || "no genre"}</h6>
                                         <p className="card-text pt-1" style={{ color: 'green', fontWeight: 'bold'}}>{book?.price || "no price"} MAD</p>
                                         <p className="card-text pt-1" style={{ maxHeight: '5rem', overflowY: 'scroll' }}>{book?.description || "no description"}</p>

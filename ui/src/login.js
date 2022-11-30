@@ -90,7 +90,7 @@ const Login = () => {
                     
                     <div className="d-flex text-center justify-content-center mt-3 ">
                         {/* long button*/}
-                        <button type="submit" className="btn btn-primary btn-lg btn-block" onClick={formSubmit}>Login</button>
+                        <button type="button" className="btn btn-primary  btn-block" onClick={formSubmit}>Login</button>
 
                     </div>
                 </form>
