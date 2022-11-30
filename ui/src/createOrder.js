@@ -6,12 +6,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 
-export default function OrderModel({ title, book, store, price_ }) {
+export default function OrderModel({ title, book, store, price_ ,handleColseIt}) {
 
 
     const navigate = useNavigate();
     const [show, setShow] = useState(true);
-    const handleClose = () => setShow(false);
+    const handleClose = () => handleColseIt();
     const handleShow = () => setShow(true);
     const [loading, setloading] = useState(false);
     const [leftstore, setleftstore] = useState(0);
@@ -25,6 +25,7 @@ export default function OrderModel({ title, book, store, price_ }) {
 
     useEffect(() => {
         setleftstore(store)
+
     }, [store])
 
 

@@ -24,6 +24,8 @@ function Bookery() {
 
 
     useEffect(() => {
+
+        setShow__(false)
         // check local storage user roles
         const user = JSON.parse(localStorage.getItem('admin'));
         if (user) {
@@ -62,6 +64,7 @@ function Bookery() {
                 console.log("refresh")
                 setbooks(res.data.books);
                 setdata(res.data.books);
+                setShow__(false)
                 setloading(false);
             })
     }
@@ -105,7 +108,8 @@ function Bookery() {
 
     const handleOpenModalOrder= (e,id) => {
         e.preventDefault();
-            setShow__(id);
+        alert(id)
+        setShow__(id);   
     }
 
     const handleSort = (e) => {
@@ -118,7 +122,9 @@ function Bookery() {
     }
 
 
-
+    const handleColseIt = ()=>{
+        setShow__(false)
+    }
 
 
     return (
@@ -260,7 +266,7 @@ function Bookery() {
                                                 <img src="https://img.icons8.com/fluency-systems-filled/32/7950F2/favorites.png" alt="save"/>
                                             </button>
                                             {
-                                                show__ === book.id && <OrderModel title={book.titre} key={book.id} book={book.id} store={book.storage} price_={book.price} />
+                                                show__ === book.id && <OrderModel title={book.titre} key={book.id} book={book.id} store={book.storage} price_={book.price} handleColseIt={handleColseIt} />
                                             }
                                         </div>
                                     </div>
