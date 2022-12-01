@@ -76,14 +76,14 @@ const Login = () => {
                 <form>
                     <div className="form-group" >
                         <label htmlFor="exampleInputEmail1">Email/Username</label>
-                        <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="username" onChange={
+                        <input type="email" className="form-control" id="exampleInputEmail1" placeholder="email/username" aria-describedby="emailHelp" name="username" onChange={
                             InputEvent
                         } />
                         <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
-                        <input type="password" className="form-control" id="password" aria-describedby="phoneHelp" name="password" onChange={
+                        <input type="password" className="form-control" id="password" placeholder="password" aria-describedby="phoneHelp" name="password" onChange={
                             InputEvent
                         } />
                     </div>

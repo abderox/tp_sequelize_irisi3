@@ -14,7 +14,7 @@ function Footer() {
                         <h5>Features</h5>
                         <ul className="list-unstyled text-small">
                             <li><a className="link-secondary text-decoration-none" href="#">Cool stuff</a></li>
-                            <li><a className="link-secondary text-decoration-none" href="#">randoùm books</a></li>
+                            <li><a className="link-secondary text-decoration-none" href="#">random books</a></li>
                             <li><a className="link-secondary text-decoration-none" href="#">Top ranked books</a></li>
                         </ul>
                     </div>

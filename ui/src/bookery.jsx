@@ -18,8 +18,8 @@ function Bookery() {
     const [show_, setShow_] = useState(false);
     const [show__, setShow__] = useState(false);
     const [data, setdata] = useState([]);
-    const [search,setsearch] = useState([]);
-    const [admin,setAdmin] = useState(false);
+    const [search, setsearch] = useState([]);
+    const [admin, setAdmin] = useState(false);
     const imageURL = "http://localhost:8085/api/books/download/"
 
 
@@ -33,7 +33,7 @@ function Bookery() {
                 setAdmin(true);
             }
         }
-        
+
         setloading(true);
         axios.get('http://localhost:8085/api/books')
             .then(res => {
@@ -106,10 +106,9 @@ function Bookery() {
         setShow_(id);
     }
 
-    const handleOpenModalOrder= (e,id) => {
+    const handleOpenModalOrder = (e, id) => {
         e.preventDefault();
-        alert(id)
-        setShow__(id);   
+        setShow__(id);
     }
 
     const handleSort = (e) => {
@@ -122,15 +121,15 @@ function Bookery() {
     }
 
 
-    const handleColseIt = ()=>{
+    const handleColseIt = () => {
         setShow__(false)
     }
 
+    
 
     return (
 
         <div >
-
 
             <div className="d-block justify-content-center mt-2">
                 <div className="row justify-content-center mb-5">
@@ -140,10 +139,10 @@ function Bookery() {
                     </div>
                 </div>
                 <div className="row  justify-content-center m-4" style={{
-                      backgroundColor: 'white',
-                      borderRadius: '10px',
-                      padding: '20px',
-                      boxShadow: '0 0 10px 0 rgba(0,0,0,0.2)'
+                    backgroundColor: 'white',
+                    borderRadius: '10px',
+                    padding: '20px',
+                    boxShadow: '0 0 10px 0 rgba(0,0,0,0.2)'
                 }}>
 
                     <div className="col-2 col-md  col-lg pt-2 ">
@@ -151,14 +150,14 @@ function Bookery() {
                             onClick={
                                 refresh
                             }>
-                        <img src="https://img.icons8.com/ios-filled/36/7950F2/update-left-rotation.png" alt="reset"/></button>
+                            <img src="https://img.icons8.com/ios-filled/36/7950F2/update-left-rotation.png" alt="reset" /></button>
                     </div>
 
                     <div className="col-10 col-md-4 col-lg-4 pt-2">
-                        <input type="text" className="form-control" placeholder="Search by title" name="search" value={search} 
-                        onChange={
-                            handleSearch
-                        }
+                        <input type="text" className="form-control" placeholder="Search by title" name="search" value={search}
+                            onChange={
+                                handleSearch
+                            }
                         />
 
                     </div>
@@ -202,84 +201,95 @@ function Bookery() {
                 </div>
 
                 <div className=" justify-content-center">
-                   
-                        <div className="col-12 p-3" style={{ 
 
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                            gridGap: '1rem',
-                            gridAutoRows: 'minmax(100px, auto)',
-                            borderRadius: '5px',
-                            backgroundColor: 'white',
-                            borderRadius: '10px',
-                            padding: '20px',
-                            boxShadow: '0 0 10px 0 rgba(0,0,0,0.2)',
-                            padding: '20px',
-                            marginBottom: '20px'
+                    <div className="col-12 p-3" style={{
 
-                        }}>
-                            {!loading && data.map((book) => (
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                        gridGap: '1rem',
+                        gridAutoRows: 'minmax(100px, auto)',
+                        borderRadius: '5px',
+                        backgroundColor: 'white',
+                        borderRadius: '10px',
+                        padding: '20px',
+                        boxShadow: '0 0 10px 0 rgba(0,0,0,0.2)',
+                        padding: '20px',
+                        marginBottom: '20px'
 
-                                <div className="card p-3 m-1  " key={book?.id} style={{  height: '32rem', fontSize: '13px', border: '2px solid #7209b7' , background: '#ffffff',
-                                boxShadow:  '26px 26px 52px #ededed, -26px -26px 52px #ffffff' }}>
-                                    <div className="card-body text-center ">
-                                        <img src={
-                                            imageURL + book?.couverture
-                                        } className="card-img-top" alt="..."
-                                            style={{
-                                                width: '100%',
-                                                height: '15rem',
-                                                borderRadius: '8px',
-                                                boxShadow: '0 0 10px 0 rgba(0,0,0,0.2)'
+                    }}>
+                        {!loading && data.map((book) => (
 
-                                            }}
-                                        />
-                                        <h5 className="card-title pt-2">{book?.titre || "no titre"} </h5>
-                                        <h6 className="card-subtitle  text-muted">{book?.Genre.name || "no genre"}</h6>
-                                        <p className="card-text pt-1" style={{ color: 'green', fontWeight: 'bold'}}>{book?.price || "no price"} MAD</p>
-                                        <p className="card-text pt-1" style={{ maxHeight: '5rem', overflowY: 'scroll' }}>{book?.description || "no description"}</p>
-                                        <div className="d-flex justify-content-center">
-                                            {admin && <button style={{ all: 'unset', cursor: 'pointer' }}
-                                                onClick={(e) => { handledelete(e, book.id) }}
-                                                key={book.id + book?.titre}
-                                            >
-                                                <img src="https://img.icons8.com/color/28/000000/trash--v1.png" />
-                                            </button>}
-                                            
-                                            {admin && <button style={{
-                                                all: 'unset', cursor: 'pointer',
-                                               
-                                            }} key={book.id + book.price}
-                                                onClick={(e) => { handleOpenModalEdit(e, book.id) }}
-                                            >
-                                                <img src="https://img.icons8.com/arcade/28/000000/pencil.png" />
-                                            </button>}
-                                            {
-                                                show_ === book.id && <EditModal id={book.id} key={book.id} />
-                                            }
-                                            <button style={{
-                                                all: 'unset', cursor: 'pointer',
-                                               
-                                            }} key={book.id + book.price}
-                                                onClick={(e) => { handleOpenModalOrder(e,book.id) }}
-                                            >
-                                                <img src="https://img.icons8.com/fluency-systems-filled/32/7950F2/favorites.png" alt="save"/>
-                                            </button>
-                                            {
-                                                show__ === book.id && <OrderModel title={book.titre} key={book.id} book={book.id} store={book.storage} price_={book.price} handleColseIt={handleColseIt} />
-                                            }
-                                        </div>
+                            <div className="card p-3 m-1  " key={book?.id} style={{
+                                height: '32rem', fontSize: '13px', border: '2px solid #7209b7', background: '#ffffff',
+                                boxShadow: '26px 26px 52px #ededed, -26px -26px 52px #ffffff'
+                            }}>
+                                <div className="card-body text-center "
+
+                                >
+                                    <img src={
+                                        imageURL + book?.couverture
+                                    } className="card-img-top" alt="..."
+                                        style={{
+                                            width: '100%',
+                                            height: '15rem',
+                                            borderRadius: '8px',
+                                            boxShadow: '0 0 10px 0 rgba(0,0,0,0.2)'
+
+                                        }}
+                                    />
+                                    <h5 className="card-title pt-2">{book?.titre || "no titre"} </h5>
+                                    <h6 className="card-subtitle  text-muted">{book?.Genre.name || "no genre"}</h6>
+                                    <p className="card-text pt-1" style={{ color: 'green', fontWeight: 'bold' }}>{book?.price || "no price"} MAD</p>
+                                    <p className="card-text pt-1" style={{ maxHeight: '5rem', overflowY: 'scroll' }}>{book?.description || "no description"}</p>
+                                    <div className="d-flex justify-content-center">
+                                        {admin && <button style={{ all: 'unset', cursor: 'pointer' }}
+                                            onClick={(e) => { handledelete(e, book.id) }}
+                                            key={book.id + book?.titre}
+                                        >
+                                            <img src="https://img.icons8.com/color/28/000000/trash--v1.png" />
+                                        </button>}
+
+                                        {admin && <button style={{
+                                            all: 'unset', cursor: 'pointer',
+
+                                        }} key={book.id + book.price}
+                                            onClick={(e) => { handleOpenModalEdit(e, book.id) }}
+                                        >
+                                            <img src="https://img.icons8.com/arcade/28/000000/pencil.png" />
+                                        </button>}
+                                        {
+                                            show_ === book.id && <EditModal id={book.id} key={book.id} />
+                                        }
+                                        <button style={{
+                                            all: 'unset', cursor: 'pointer',
+
+                                        }} key={book.id + book.price}
+                                            onClick={(e) => { handleOpenModalOrder(e, book.id) }}
+                                        >
+                                            <img src="https://img.icons8.com/fluency-systems-filled/32/7950F2/favorites.png" alt="save" />
+                                        </button>
+                                        {
+                                            show__ === book.id && <OrderModel
+                                                title={book.titre}
+                                                key={book.id}
+                                                book={book.id}
+                                                store={book.storage}
+                                                price_={book.price}
+                                                category={book?.Genre.name}
+                                                handleColseIt={handleColseIt} />
+                                        }
                                     </div>
-
                                 </div>
 
-                            ))}
-                        </div>
+                            </div>
+
+                        ))}
+                    </div>
 
 
-                 
+
                 </div>
-              
+
 
             </div>
         </div>

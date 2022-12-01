@@ -1,11 +1,20 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
+import Alert from 'react-bootstrap/Alert';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import Cart from './cart';
+import Badge from 'react-bootstrap/Badge';
+
+
 const Navbar = ({ props }) => {
 
 
     const navigate = useNavigate();
     const [loggedIn, setLoggedIn] = useState();
+    const [showCart, setshowCart] = useState(false);
+    const [cartCount, setcartCount] = useState(0);
+    const [orderSuccess, setorderSuccess] = useState(false);
+
     const logout = () => {
         localStorage.removeItem('admin');
         navigate('/');
@@ -16,15 +25,52 @@ const Navbar = ({ props }) => {
         if (user) {
             setLoggedIn(true);
         }
-    }, [])
+    }, []);
 
+    useEffect(() => {
+        const cart = JSON.parse(localStorage.getItem('cart'));
+            if (cart) {
+                setcartCount(cart.length);
+            }
+    }, [JSON.parse(localStorage.getItem('cart'))]);
+
+    const handleShowCart= (e)=>{
+        setshowCart(!showCart);
+    }
+
+    const handleCloseModal = ()=>{
+        setshowCart(false);
+    }
+
+    const handleOrderSuccess = () => {
+        setorderSuccess(true);
+    }
 
     return (
         <nav class="navbar navbar-light bg-light">
+{
+                orderSuccess && <Alert variant="success" onClose={() => setorderSuccess(false)} dismissible style={{ 
+                    position: 'absolute',
+                    top: '0',
+                    right: '0',
+                    left:'0',
+                    zIndex: '9999',
+                    textAlign: 'center',
+                    borderRadius: '0',
+                    margin: 'auto',
+                }}>
+                    <Alert.Heading>{'Hey, Thanks for buying from us :)'}</Alert.Heading>
+                    <p>
+                        Your order has been successfully recorded , we wil contact you soon!
+                    </p>
+                    <p>
+                        {'We hope you enjoy the books !'}
 
+                    </p>
+                </Alert>}
             <div className="container">
                 <a className="navbar-brand" href="#">
-                    <img src="https://img.icons8.com/hands/100/000000/experimental-book-reading-hands.png" alt="" width="100" height="100" />
+                    <img src="https://img.icons8.com/external-smashingstocks-hand-drawn-black-smashing-stocks/99/7950F2/external-books-education-smashingstocks-hand-drawn-black-smashing-stocks.png" alt="" width="100" height="100" />
                     <span className="text-muted" style={{ fontSize: '35pt' }}> Bookery</span>
                 </a>
                 <form class="d-flex  align-items-center
@@ -41,6 +87,42 @@ const Navbar = ({ props }) => {
 
 
             </div>
+            {/* gray navbar */}
+            <div className="container justify-content-center mt-1" style={{
+                backgroundColor: '#EDEEF7',
+                borderRadius: '10px',
+            }}>
+               
+                    <ul className="nav justify-content-center">
+                        <li className="nav-item">
+                            <button style={{
+                                all: 'unset',
+                                cursor: 'pointer',
+                                fontWeight: 'bold',
+                                fontSize: '15pt',
+                            
+                            }}
+                                onClick={handleShowCart}
+                            >
+                                <span className="nav-link " style={{ color: '#7950F2'}}>
+                                    <img src="https://img.icons8.com/external-smashingstocks-isometric-smashing-stocks/48/null/external-book-shelves-education-smashingstocks-isometric-smashing-stocks.png" alt="cart" />
+                                     <Badge
+                                        bg="secondary"
+                                        text="light"
+                                        style={{ marginLeft: '5px' }}
+                                    >
+                                        {cartCount}
+                                    </Badge>
+
+                                </span>
+                            </button>
+                        </li>
+                    </ul>
+
+            </div>
+            
+                 {showCart && <Cart handleShowCart={handleCloseModal} handleOrderSuccess={handleOrderSuccess} />}
+            
         </nav>
     )
 }

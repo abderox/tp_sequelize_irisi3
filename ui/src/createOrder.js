@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 
-export default function OrderModel({ title, book, store, price_ ,handleColseIt}) {
+export default function OrderModel({ title, book, store, price_, category, handleColseIt }) {
 
 
     const navigate = useNavigate();
@@ -20,7 +20,6 @@ export default function OrderModel({ title, book, store, price_ ,handleColseIt})
         userId: 0,
         date: '',
         units: 0,
-        books: [],
     });
 
     useEffect(() => {
@@ -89,6 +88,36 @@ export default function OrderModel({ title, book, store, price_ ,handleColseIt})
         handleSoustraction(e.target.value)
     }
 
+    const addToCart = () => {
+        // add to local storage cart
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let cart_ = JSON.parse(localStorage.getItem('cart_')) || [];
+
+        //check book id if exists replace
+        let index = cart.findIndex(x => x.id === book);
+        if (index > -1) {
+            cart[index].units = dataToSend.units;
+        }
+        else {
+            let obj = {}
+            obj.id = book;
+            obj.units = parseInt(dataToSend.units);
+            cart.push(obj);
+            
+            let obj_ = {...obj}
+            obj_.price = price_;
+            obj_.category = category;
+            obj_.title = title;
+            cart_.push(obj_);
+
+           
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+        localStorage.setItem('cart_', JSON.stringify(cart_));
+        handleClose();
+    }
+
 
 
 
@@ -96,7 +125,9 @@ export default function OrderModel({ title, book, store, price_ ,handleColseIt})
         <>
 
 
-            <Modal show={show} centered >
+            <Modal show={show} centered
+                onHide={handleClose}
+            >
                 <Modal.Header closeButton>
                     <Modal.Title>Order a book !</Modal.Title>
                 </Modal.Header>
@@ -176,12 +207,12 @@ export default function OrderModel({ title, book, store, price_ ,handleColseIt})
                                     htmlFor="thisone_2"
                                     style={{
                                         color: 'gray',
-                                        marginTop : '10px',
+                                        marginTop: '10px',
                                         fontSize: '16px',
                                         fontWeight: 'bold',
                                     }}
                                 >
-                                    price*units : {price_+"*"+(dataToSend.units||0)}
+                                    price*units : {price_ + "*" + (dataToSend.units || 0)}
                                 </label>
                             </div>
                         </div>
@@ -234,7 +265,7 @@ export default function OrderModel({ title, book, store, price_ ,handleColseIt})
                     <Button variant="secondary" onClick={handleClose}>
                         Cancel
                     </Button>
-                    <Button variant="success" onClick={handleAdd}>
+                    <Button variant="success" onClick={addToCart}>
                         {loading ? "Ordering..." : "Order"}
                     </Button>
                 </Modal.Footer>
