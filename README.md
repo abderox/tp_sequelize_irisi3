@@ -1,4 +1,13 @@
-# Majorel books :books:
+# Bookery assignment
+<p
+ align="center">
+                      <img src="https://img.icons8.com/external-smashingstocks-hand-drawn-black-smashing-stocks/99/7950F2/external-books-education-smashingstocks-hand-drawn-black-smashing-stocks.png" alt="" width="200" height="200" />
+
+</p>
+
+<h1 align="center">Majorel books</h1> 
+
+<br/>
 
 Bookery is a simple, easy to use, and free book management system. It is designed using react , node js and postgreSQL.
 
