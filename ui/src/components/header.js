@@ -17,7 +17,7 @@ const Navbar = ({ props }) => {
 
     const logout = () => {
         localStorage.removeItem('admin');
-        navigate('/');
+        navigate('/bookery');
     }
 
     useEffect(() => {
@@ -29,16 +29,16 @@ const Navbar = ({ props }) => {
 
     useEffect(() => {
         const cart = JSON.parse(localStorage.getItem('cart'));
-            if (cart) {
-                setcartCount(cart.length);
-            }
+        if (cart) {
+            setcartCount(cart.length);
+        }
     }, [JSON.parse(localStorage.getItem('cart'))]);
 
-    const handleShowCart= (e)=>{
+    const handleShowCart = (e) => {
         setshowCart(!showCart);
     }
 
-    const handleCloseModal = ()=>{
+    const handleCloseModal = () => {
         setshowCart(false);
     }
 
@@ -48,12 +48,12 @@ const Navbar = ({ props }) => {
 
     return (
         <nav class="navbar navbar-light bg-light">
-{
-                orderSuccess && <Alert variant="success" onClose={() => setorderSuccess(false)} dismissible style={{ 
+            {
+                orderSuccess && <Alert variant="success" onClose={() => setorderSuccess(false)} dismissible style={{
                     position: 'absolute',
                     top: '0',
                     right: '0',
-                    left:'0',
+                    left: '0',
                     zIndex: '9999',
                     textAlign: 'center',
                     borderRadius: '0',
@@ -68,10 +68,11 @@ const Navbar = ({ props }) => {
 
                     </p>
                 </Alert>}
+
             <div className="container">
                 <a className="navbar-brand" href="#">
                     <img src="https://img.icons8.com/external-smashingstocks-hand-drawn-black-smashing-stocks/99/7950F2/external-books-education-smashingstocks-hand-drawn-black-smashing-stocks.png" alt="" width="100" height="100" />
-                    <span className="text-muted" style={{ fontSize: '35pt' }}> Bookery</span>
+                    <span className="text-muted" style={{ fontSize: '30pt' }}> Majorel books</span>
                 </a>
                 <form class="d-flex  align-items-center
                 justify-content-center">
@@ -82,47 +83,56 @@ const Navbar = ({ props }) => {
                         !loggedIn ? <button style={{ all: 'unset', cursor: 'pointer', marginLeft: '5px' }} onClick={() => navigate('/login')}><img src="https://img.icons8.com/color-glass/42/null/admin-settings-male.png" /></button> :
                             <button style={{ all: 'unset', cursor: 'pointer', marginLeft: '5px' }} onClick={logout}><img src="https://img.icons8.com/cotton/36/null/logout-rounded.png" /></button>
                     }
+
                 </form>
                 {/* adding register button */}
 
 
             </div>
             {/* gray navbar */}
-            <div className="container justify-content-center mt-1" style={{
+            <div className="container justify-content-center mt-1 p-2" style={{
                 backgroundColor: '#EDEEF7',
                 borderRadius: '10px',
             }}>
-               
-                    <ul className="nav justify-content-center">
-                        <li className="nav-item">
-                            <button style={{
-                                all: 'unset',
-                                cursor: 'pointer',
-                                fontWeight: 'bold',
-                                fontSize: '15pt',
-                            
-                            }}
-                                onClick={handleShowCart}
-                            >
-                                <span className="nav-link " style={{ color: '#7950F2'}}>
-                                    <img src="https://img.icons8.com/external-smashingstocks-isometric-smashing-stocks/48/null/external-book-shelves-education-smashingstocks-isometric-smashing-stocks.png" alt="cart" />
-                                     <Badge
-                                        bg="secondary"
-                                        text="light"
-                                        style={{ marginLeft: '5px' }}
-                                    >
-                                        {cartCount}
-                                    </Badge>
 
-                                </span>
-                            </button>
-                        </li>
-                    </ul>
+                <ul className="nav justify-content-center">
+                    <li className="nav-item">
+                        {!loggedIn ? <button style={{
+                            all: 'unset',
+                            cursor: 'pointer',
+                            fontWeight: 'bold',
+                            fontSize: '15pt',
+
+                        }}
+                            onClick={handleShowCart}
+                        >
+                            <span className="nav-link " style={{ color: '#7950F2' }}>
+                                <img src="https://img.icons8.com/external-smashingstocks-isometric-smashing-stocks/48/null/external-book-shelves-education-smashingstocks-isometric-smashing-stocks.png" alt="cart" />
+                                <Badge
+                                    bg="secondary"
+                                    text="light"
+                                    style={{ marginLeft: '5px' }}
+                                >
+                                    {cartCount}
+                                </Badge>
+
+                            </span>
+                        </button> :
+                        <>
+                            <button style={{ all: 'unset', cursor: 'pointer' }} onClick={() => navigate('/commands')}><img src="https://img.icons8.com/pastel-glyph/32/7950F2/successful-delivery.png" /> <span style={{ color: '#7950F2' , fontWeight: 'bold' }}>Orders</span></button>
+                            {/* delimiter */}
+                            <span style={{ color: '#7950F2' , fontWeight: 'bold' , marginLeft: '20px' }}> | </span>
+                            <button style={{ all: 'unset', cursor: 'pointer', marginLeft: '20px' }} onClick={() => navigate('/bookery')}><img src="https://img.icons8.com/ios-glyphs/32/7950F2/courses.png" /> <span style={{ color: '#7950F2' , fontWeight: 'bold' }}>Books</span></button>
+                            </>
+                        }
+
+                    </li>
+                </ul>
 
             </div>
-            
-                 {showCart && <Cart handleShowCart={handleCloseModal} handleOrderSuccess={handleOrderSuccess} />}
-            
+
+            {showCart && <Cart handleShowCart={handleCloseModal} handleOrderSuccess={handleOrderSuccess} />}
+
         </nav>
     )
 }

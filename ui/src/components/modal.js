@@ -1,42 +1,45 @@
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button } from 'react-bootstrap';
 import Badge from 'react-bootstrap/Badge';
 import axios from 'axios';
+import authHeader from '../api/authHeader';
 
-export default function EditModal({id}) {
+export default function InfoModal() {
 
     const [show, setShow] = useState(true);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [loading, setloading] = useState(false);
     const [file, setfile] = useState();
-    const [data,setdata] = useState({});
     const [dataToSend, setdataToSend] = useState({
         titre: '',
         couverture: '',
         description: '',
         price: '',
         genre: '',
+        genre_:'',
+        storage :'',
         maison_edition: '',
         edition_date: '',
     });
-
-    useEffect(()=>{
-        axios.get(`http://localhost:8085/api/books/${id}`)
-                .then(res => {
-                    setdata(res.data);
-                })
-    },[])
 
 
     const handleAdd = async () => {
 
         dataToSend.price = parseFloat(dataToSend.price)
+        dataToSend.storage = parseInt(dataToSend.storage)
 
-        await axios.put('http://localhost:8085/api/books/'+id, dataToSend)
+        if(dataToSend.genre_!==''){
+            dataToSend.genre = dataToSend.genre_
+            delete dataToSend.genre_
+        }
+
+        await axios.post('http://localhost:8085/api/books/', dataToSend , { headers: authHeader() })
             .then(res => {
                 setloading(false);
+                handleClose();
+                window.location.reload()
             })
 
     }
@@ -45,12 +48,17 @@ export default function EditModal({id}) {
         const formData = new FormData();
         formData.append('file', file);
 
-        await axios.post('ttp://localhost:8085/api/books/upload', formData)
-            .then(res => {
-                alert(
-                    'Image uploaded successfully'
-                )
+        if (
+            file
+        ) {
+            return await axios.post('http://localhost:8085/api/books/upload', formData, { headers: authHeader() })
+        }
+        else {
+            return new Promise((resolve, reject) => {
+                resolve()
             })
+        }
+        
     }
 
     const handleChangeFile = (e) => {
@@ -71,8 +79,8 @@ export default function EditModal({id}) {
         e.preventDefault();
         setloading(true);
         Promise.all(
-            handleAdd(),
-            uploadImage()
+            [handleAdd(),
+            uploadImage()]
         ).then((res) => {
             setloading(false)
             alert('Book added successfully')
@@ -98,7 +106,7 @@ export default function EditModal({id}) {
                                     ="form-control" placeholder="Title" name="titre"
                                     onChange={handleChange}
                                     value={
-                                        data.titre
+                                        dataToSend.titre
                                     }
                                 />
 
@@ -110,12 +118,12 @@ export default function EditModal({id}) {
                                 Description" name="description" rows="3"
                                     onChange={handleChange}
                                     value={
-                                        data.description
+                                        dataToSend.description
                                     }
 
                                 >{
-                                    data.description
-                                }</textarea>
+                                        dataToSend.description
+                                    }</textarea>
                             </div>
                         </div>
                         <div classNam="row">
@@ -124,39 +132,21 @@ export default function EditModal({id}) {
                                     ="form-control mt-1 p-1" placeholder="Price" name="price"
                                     onChange={handleChange}
                                     value={
-                                        data.price
+                                        dataToSend.price
                                     }
 
                                 />
                             </div>
-                        </div>
-                        <div classNam="row">
-                        <div className="col">
-                            <input type="text" className    
-                                ="form-control mt-1 p-1" placeholder="Genre" 
-                                value={
-                                    data?.Genre?.name
-                                }
-                                disabled
-                            />
-                        </div>
                             <div className="col">
-                                <select
-                                    className="form-select form-select-sm mt-1 p-1"
-                                    aria-label=".form-select-sm example"
-                                    name="genre"
+                                <input type="text" className
+                                    ="form-control mt-1 p-1" placeholder="Units" name="storage"
                                     onChange={handleChange}
+                                    value={
+                                        dataToSend.storage
+                                    }
 
-
-                                >
-                                    <option  value="other">Category</option>
-                                    <option value="Romance">Romance</option>
-                                    <option value="Horror">Horror</option>
-                                    <option value="fiction">Science fiction</option>
-                                </select>
-
+                                />
                             </div>
-
                         </div>
                         <div classNam="row">
                             <div className="col-12">
@@ -182,6 +172,41 @@ export default function EditModal({id}) {
                             </div>
                         </div>
                         <div classNam="row">
+                            <div className="col-12">
+                                <select
+                                    className="form-select form-select-sm mt-1 p-1"
+                                    aria-label=".form-select-sm example"
+                                    name="genre"
+                                    onChange={handleChange}
+
+
+                                >
+                                    <option value="Other">--category--</option>
+                                    <option value="customized">Custom</option>
+                                    <option value="Romance">Romance</option>
+                                    <option value="Horror">Horror</option>
+                                    <option value="fiction">Science fiction</option>
+                                </select>
+
+                            </div>
+                            {
+                                dataToSend.genre === "customized" &&
+                                <div className="col-12">
+                                    <input type="text" className
+                                        ="form-control mt-1 p-1" placeholder="Autre genre" name="genre_"
+                                        onChange={handleChange}
+                                        value={
+                                            dataToSend.genre_
+                                        }
+
+                                    />
+                                </div>
+
+                            }
+                            
+                           
+                        </div>
+                        <div classNam="row">
                             <div className="col">
                             <input
                                 type="file"
@@ -201,7 +226,7 @@ export default function EditModal({id}) {
                         Close
                     </Button>
                     <Button variant="success" onClick={handleSubmit}>
-                        {loading ? "Editing..." : "Edit"}
+                        {loading ? "saving..." : "Save"}
                     </Button>
                 </Modal.Footer>
             </Modal>

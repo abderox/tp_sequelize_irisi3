@@ -13,7 +13,10 @@ const getAllBooks = async (req, res) => {
         const books = await Book.findAll({
             include: [{
                 model: Genre,
-            }],
+            },
+            {
+                model: Edition,
+            }]
         });
 
         const genres = []
@@ -115,12 +118,13 @@ const updateBook = async (req, res) => {
         delete req.body.genre;
         console.log(req.body)
 
-        const edition = {}
-        edition.date_parutiion = req.body.edition_date;
-        edition.maison_edition = req.body.maison_edition;
+        // const edition = {}
+        // edition.date_parutiion = req.body.edition_date;
+        // edition.maison_edition = req.body.maison_edition;
 
-        delete req.body.edition_date;
-        delete req.body.maison_edition;
+        // delete req.body.edition_date;
+        // delete req.body.maison_edition;
+        const editions = req.body.editions;
 
         //create genre if not exists
         const genre = await Genre.findOrCreate({
@@ -139,17 +143,32 @@ const updateBook = async (req, res) => {
         });
 
 
+        
+
+        // add new editions 
+        editions.forEach(async (edition) => {
+            console.log(edition)
+            const edition_ = await Edition.create({
+                date_parutiion: edition.date_parution,
+                maison_edition: edition.maison_edition
+            })
+            //set edition
+            await edition_.setBook(req.params.id);
+        })
+
         res.status(200).json({
             message: "updated successfully"
         });
 
-        // update edition 
-        await Edition.update({
-            date_parutiion: edition.date_parutiion,
-            maison_edition: edition.maison_edition
-        }, {
-            where: { book_id: req.params.id },
-        });
+
+
+        // // update edition 
+        // await Edition.update({
+        //     date_parutiion: edition.date_parutiion,
+        //     maison_edition: edition.maison_edition
+        // }, {
+        //     where: { book_id: req.params.id },
+        // });
 
 
     } catch (error) {
@@ -202,7 +221,7 @@ const uploadProfileImage = async (req, res) => {
         if (err) {
             return res.status(500).send(err);
         }
-
+        console.log("Uploaded successfully")
         res.status(200).json({
             message: 'File uploaded!',
         });
@@ -313,7 +332,7 @@ const getAllOrders = async (req, res) => {
                 {
                     model: User,
                     as: "User",
-                    attributes: ["username", "email"]
+                    attributes: ["username", "email","address"]
                 }
             ]
         });
@@ -342,33 +361,43 @@ const createClient = async (req, res) => {
 
 const updateOrder = async(req, res) => {
     try {
-        const { status , orderId } = req.body;
-
+        const  orderId  = req.params.id;
+        console.log("🚀 ~ file: bookery.controller.js:365 ~ updateOrder ~ orderId", orderId)
+        
         const order = await Order.findOne({
             where: { id: orderId }
         })
+        console.log("🚀 ~ file: bookery.controller.js:370 ~ updateOrder ~ order", order)
 
         if(order.status === "PENDING"){
             const book = await Book.
             findOne({
-                where: { id: order.book_id }
+                where: { id: order.book }
             })
+            console.log("🚀 ~ file: bookery.controller.js:377 ~ updateOrder ~ book", book)
+            
 
-            if(book.units < order.units){
-                return res.status(400).json({
-                    message: "units not available"
+            if(book.storage < order.units){
+                await Order.update({
+                    status : "RUNOUT"
+                }, {
+                    where: { id: orderId }
                 })
+                return res.status(404).json({
+                    message: "not enough units"   
+                })
+
             }
 
             await Order.update({
-                status
+                status : "PROCESSING"
             }, {
                 where: { id: orderId }
             })
 
             await Book.update({
 
-                units: book.units - order.units
+                units: book.storage - order.units
 
             }, {
                 where: { id: order.book_id }
@@ -384,6 +413,39 @@ const updateOrder = async(req, res) => {
             })
         }
 
+    } catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+    }
+}
+
+
+const remmoveOrder = (req, res) => {
+    try {
+        const { orderId } = req.body;
+        Order.destroy({
+            where: { id: orderId }
+        })
+        res.status(200).json({
+            message: "order deleted successfully"
+        })
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
+
+const declineOrder = (req, res) => {
+    try {
+        const  orderId  = req.params.id
+        Order.update({
+            status: "DECLINED"
+        }, {
+            where: { id: orderId }
+        })
+        res.status(200).json({
+            message: "order declined successfully"
+        })
     } catch (error) {
         res.status(500).json(error);
     }
@@ -403,5 +465,7 @@ module.exports = {
     createOrder,
     getAllOrders,
     createClient,
-    updateOrder
+    updateOrder,
+    remmoveOrder,
+    declineOrder
 };

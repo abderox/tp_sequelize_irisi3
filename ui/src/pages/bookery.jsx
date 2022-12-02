@@ -2,10 +2,10 @@ import Alert from 'react-bootstrap/Alert';
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import Badge from 'react-bootstrap/Badge';
-import InfoModal from './modal';
-import EditModal from './modalEdit'
-import OrderModel from './createOrder';
-import authHeader from './authHeader';
+import EditModal from '../components/modalEdit'
+import InfoModal from '../components/modal';
+import OrderModel from '../components/createOrder';
+import authHeader from '../api/authHeader';
 
 
 
@@ -125,19 +125,18 @@ function Bookery() {
         setShow__(false)
     }
 
-    
+    const handleCloseEdit = () => {
+        setShow_(false);
+    }
+
+
 
     return (
 
         <div >
 
             <div className="d-block justify-content-center mt-2">
-                <div className="row justify-content-center mb-5">
 
-                    <div className="col-12">
-                        <h1 className="text-center display-4 text-success fw-bold title-header" >Majorel books</h1>
-                    </div>
-                </div>
                 <div className="row  justify-content-center m-4" style={{
                     backgroundColor: 'white',
                     borderRadius: '10px',
@@ -221,7 +220,9 @@ function Bookery() {
 
                             <div className="card p-3 m-1  " key={book?.id} style={{
                                 height: '32rem', fontSize: '13px', border: '2px solid #7209b7', background: '#ffffff',
-                                boxShadow: '26px 26px 52px #ededed, -26px -26px 52px #ffffff'
+                                boxShadow: '26px 26px 52px #ededed, -26px -26px 52px #ffffff',
+                                maxWidth : '300px', 
+                                borderRadius: '10px', padding: '20px'
                             }}>
                                 <div className="card-body text-center "
 
@@ -240,7 +241,7 @@ function Bookery() {
                                     <h5 className="card-title pt-2">{book?.titre || "no titre"} </h5>
                                     <h6 className="card-subtitle  text-muted">{book?.Genre.name || "no genre"}</h6>
                                     <p className="card-text pt-1" style={{ color: 'green', fontWeight: 'bold' }}>{book?.price || "no price"} MAD</p>
-                                    <p className="card-text pt-1" style={{ maxHeight: '5rem', overflowY: 'scroll' }}>{book?.description || "no description"}</p>
+                                    <p className="card-text pt-1" style={{ height: '5rem', overflowY: 'auto' }}>{book?.description || "no description"}</p>
                                     <div className="d-flex justify-content-center">
                                         {admin && <button style={{ all: 'unset', cursor: 'pointer' }}
                                             onClick={(e) => { handledelete(e, book.id) }}
@@ -258,7 +259,7 @@ function Bookery() {
                                             <img src="https://img.icons8.com/arcade/28/000000/pencil.png" />
                                         </button>}
                                         {
-                                            show_ === book.id && <EditModal id={book.id} key={book.id} />
+                                            show_ === book.id && <EditModal id={book.id} key={book.id} handleCloseEdit={handleCloseEdit} />
                                         }
                                         <button style={{
                                             all: 'unset', cursor: 'pointer',
@@ -276,6 +277,7 @@ function Bookery() {
                                                 store={book.storage}
                                                 price_={book.price}
                                                 category={book?.Genre.name}
+                                                editions={book.Editions}
                                                 handleColseIt={handleColseIt} />
                                         }
                                     </div>

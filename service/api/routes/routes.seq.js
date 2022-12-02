@@ -12,7 +12,10 @@ const {
     getAllGenres,
     createOrder,
     getAllOrders,
-    createClient
+    createClient,
+    remmoveOrder,
+    declineOrder,
+    updateOrder
 } = require("../controllers/bookery.controller");
 
 // import middlewares
@@ -33,6 +36,9 @@ router.get("/genres", getAllGenres);
 router.post("/order", createOrder);
 router.get("/orders/all",[verifyToken,isAdmin], getAllOrders);
 router.post("/client/create", createClient);
+router.delete("/order/delete/:id",[verifyToken,isAdmin], remmoveOrder);
+router.put("/order/decline/:id", declineOrder);
+router.put("/order/update/:id", updateOrder);
 
 
 module.exports = router;

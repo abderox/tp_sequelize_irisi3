@@ -1,15 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
-import Bookery from './bookery'
-import Navbar from './header'
-import Footer from './footer';
+import Navbar from './components/header'
+import Footer from './components/footer';
+import { Outlet } from 'react-router-dom';
 
 function App() {
   return (
     <>
     <Navbar />
      <div className="container">
-     <Bookery />
+     <Outlet/>
     </div>
     <Footer/>
     </>

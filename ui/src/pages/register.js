@@ -44,7 +44,7 @@ const Register = () => {
                 // save or overwrite to local storage
                 localStorage.setItem('user', JSON.stringify(res.data));
                 // redirect to home page
-                navigate('/');
+                navigate('/bookery');
             }).catch(error =>
                 console.log(error));
     }

@@ -41,7 +41,7 @@ const Login = () => {
                 // save or overwrite to local storage
                 localStorage.setItem('admin', JSON.stringify(res.data));
                 // redirect to home page
-                navigate('/');
+                navigate('/bookery');
             }).catch(error =>
                alert(error.response.data.message));
     }

@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button } from 'react-bootstrap';
 import Badge from 'react-bootstrap/Badge';
+import ListGroup from 'react-bootstrap/ListGroup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 
-export default function OrderModel({ title, book, store, price_, category, handleColseIt }) {
+export default function OrderModel({ title, book, store, price_, category, editions, handleColseIt }) {
 
 
     const navigate = useNavigate();
@@ -97,20 +98,21 @@ export default function OrderModel({ title, book, store, price_, category, handl
         let index = cart.findIndex(x => x.id === book);
         if (index > -1) {
             cart[index].units = dataToSend.units;
+            cart_[index].units = dataToSend.units;
         }
         else {
             let obj = {}
             obj.id = book;
             obj.units = parseInt(dataToSend.units);
             cart.push(obj);
-            
-            let obj_ = {...obj}
+
+            let obj_ = { ...obj }
             obj_.price = price_;
             obj_.category = category;
             obj_.title = title;
             cart_.push(obj_);
 
-           
+
         }
 
         localStorage.setItem('cart', JSON.stringify(cart));
@@ -155,6 +157,40 @@ export default function OrderModel({ title, book, store, price_, category, handl
 
                             </div>
                         </div>
+                        <div classNam=" p-1 " style={{ 
+                            marginTop:'10px',
+                            marginBottom:'10px',
+                            maxHeight:'200px',
+                            overflow:'auto'
+                        }}>
+                            {/* map over book editions */}
+                            <ListGroup >
+                                <ListGroup.Item>
+                                    <ListGroup horizontal>
+
+                                        <ListGroup.Item style={{ width: '50%' }} className="font-weight-bold text-danger">Publisher</ListGroup.Item>
+                                        <ListGroup.Item style={{ width: '50%' }} className="font-weight-bold text-danger">Publishing date</ListGroup.Item>
+                                    </ListGroup>
+                                </ListGroup.Item>
+                                {
+                                    editions?.map((edition, index) => {
+                                        return (
+                                            <ListGroup.Item
+                                                key={index}
+                                                className="mt-2 p-1"
+                                            >
+                                                <ListGroup horizontal>
+
+                                                    <ListGroup.Item style={{ width: '50%' }}>{edition.maison_edition}</ListGroup.Item>
+                                                    <ListGroup.Item style={{ width: '50%' }}>{edition.date_parutiion}</ListGroup.Item>
+                                                </ListGroup>
+                                            </ListGroup.Item>
+                                        )
+                                    })
+                                }
+                            </ListGroup>
+
+                        </div>
                         <div classNam="row mt-2 p-1 ">
                             <div className="col form-group">
                                 <label
@@ -179,6 +215,7 @@ export default function OrderModel({ title, book, store, price_, category, handl
                                 }}
                             >{leftstore} books will be left in store</small>
                         </div>
+
                         <div classNam="row mt-2 mb-2 p-1 ">
                             <div className="col">
                                 <label
