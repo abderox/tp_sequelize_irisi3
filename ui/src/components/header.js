@@ -47,7 +47,7 @@ const Navbar = ({ props }) => {
     }
 
     return (
-        <nav class="navbar navbar-light bg-light">
+        <nav className="navbar navbar-light bg-light">
             {
                 orderSuccess && <Alert variant="success" onClose={() => setorderSuccess(false)} dismissible style={{
                     position: 'absolute',
@@ -74,7 +74,7 @@ const Navbar = ({ props }) => {
                     <img src="https://img.icons8.com/external-smashingstocks-hand-drawn-black-smashing-stocks/99/7950F2/external-books-education-smashingstocks-hand-drawn-black-smashing-stocks.png" alt="" width="100" height="100" />
                     <span className="text-muted" style={{ fontSize: '30pt' }}> Majorel books</span>
                 </a>
-                <form class="d-flex  align-items-center
+                <form className="d-flex  align-items-center
                 justify-content-center">
                     <p className="text-muted pt-2" style={{ fontSize: '13pt' }}>"the best book store !"</p>
 

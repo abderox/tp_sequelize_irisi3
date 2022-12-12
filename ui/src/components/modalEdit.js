@@ -27,7 +27,7 @@ export default function EditModal({ id, handleCloseEdit }) {
     });
 
     useEffect(() => {
-        axios.get(`http://localhost:8085/api/books/${id}`)
+        axios.get(`http://localhost:8085/apiv2/books/${id}`)
             .then(res => {
 
                 setdata(res.data)
@@ -37,7 +37,7 @@ export default function EditModal({ id, handleCloseEdit }) {
                         titre: res.data.titre,
                         description: res.data.description,
                         price: res.data.price,
-                        genre: res.data.Genre.name,
+                        genre: res.data.genre.name,
                         couverture: res.data.couverture
                     }
                 })
@@ -53,7 +53,7 @@ export default function EditModal({ id, handleCloseEdit }) {
         dataToSend.price = parseFloat(dataToSend.price)
         console.log(dataToSend)
 
-        await axios.put('http://localhost:8085/api/books/' + id, dataToSend, { headers: authHeader() })
+        await axios.put('http://localhost:8085/apiv2/books/' + id, dataToSend, { headers: authHeader() })
 
     }
 
@@ -64,7 +64,7 @@ export default function EditModal({ id, handleCloseEdit }) {
         if (
             file
         ) {
-            return await axios.post('http://localhost:8085/api/books/upload', formData, { headers: authHeader() })
+            return await axios.post('http://localhost:8085/apiv2/books/upload', formData, { headers: authHeader() })
         }
         else {
             return new Promise((resolve, reject) => {
@@ -120,7 +120,7 @@ export default function EditModal({ id, handleCloseEdit }) {
                 <Modal.Body>
 
                     <div className="justify-content-center d-block">
-                        <div classNam="row mt-1 p-1 ">
+                        <div className="row mt-1 p-1 ">
                             <div className="col">
                                 <input type="text" className
                                     ="form-control" placeholder="Title" name="titre"
@@ -132,7 +132,7 @@ export default function EditModal({ id, handleCloseEdit }) {
 
                             </div>
                         </div>
-                        <div classNam="row">
+                        <div className="row">
                             <div className="col">
                                 <textarea className="form-control mt-1 p-1" placeholder="
                                 Description" name="description" rows="3"
@@ -146,7 +146,7 @@ export default function EditModal({ id, handleCloseEdit }) {
                                     }</textarea>
                             </div>
                         </div>
-                        <div classNam="row">
+                        <div className="row">
                             <div className="col">
                                 <input type="text" className
                                     ="form-control mt-1 p-1" placeholder="Price" name="price"
@@ -158,7 +158,7 @@ export default function EditModal({ id, handleCloseEdit }) {
                                 />
                             </div>
                         </div>
-                        <div classNam="row">
+                        <div className="row">
                             <div className="col">
                                 <input type="text" className
                                     ="form-control mt-1 p-1" placeholder="Genre"
@@ -186,7 +186,7 @@ export default function EditModal({ id, handleCloseEdit }) {
                             </div>
 
                         </div>
-                        <div classNam=" p-1 " style={{
+                        <div className=" p-1 " style={{
                             marginTop: '10px',
                             marginBottom: '10px',
                             maxHeight: '200px',
@@ -284,7 +284,7 @@ export default function EditModal({ id, handleCloseEdit }) {
                             </ListGroup>
 
                         </div>
-                        <div classNam="row">
+                        <div className="row">
                             <div className="col">
                                 <input
                                     type="file"

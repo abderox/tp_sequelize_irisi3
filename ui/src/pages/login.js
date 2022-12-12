@@ -35,7 +35,7 @@ const Login = () => {
         // Send data to server
         console.log(data);
 
-        axios.post('http://localhost:8085/api/auth/signin', data)
+        axios.post('http://localhost:8085/apiv2/auth/signin', data)
             .then(res => {
                 console.log(res.data);
                 // save or overwrite to local storage

@@ -18,7 +18,7 @@ function Commands() {
     const [commands, setCommands] = React.useState([]);
 
     React.useEffect(() => {
-        axios.get('http://localhost:8085/api/books/orders/all', 
+        axios.get('http://localhost:8085/apiv2/books/orders/all', 
         { headers: authHeader() })
             .then(res => {
                 setCommands(res.data);
@@ -30,7 +30,7 @@ function Commands() {
         console.log(id);
         
         
-        axios.put('http://localhost:8085/api/books/order/decline/' + id, 
+        axios.put('http://localhost:8085/apiv2/books/order/decline/' + id, 
         { headers: authHeader() })
             .then(res => {
                 // change command status to declined 
@@ -47,7 +47,7 @@ function Commands() {
 
     const updateOrder = (id) =>{
         console.log(id);
-        axios.put('http://localhost:8085/api/books/order/update/' + id)
+        axios.put('http://localhost:8085/apiv2/books/order/update/' + id)
             .then(res => {
                 // change command status to declined 
                 setCommands(commands.map(command => {
@@ -99,18 +99,18 @@ function Commands() {
                             commands.map((command, index) => (
                                 <tr key={index}>
                                     <td>{command?.id}</td>
-                                    <td>{command?.User?.email}</td>
-                                    <td>{command?.User?.address}</td>
+                                    <td>{command?.user?.email}</td>
+                                    <td>{command?.user?.address}</td>
                                     <td>{command?.date}</td>
                                     <td><span className={`badge ${map.get(command.status)}`}>{command?.status}</span></td>
-                                    <td>{command?.Book?.titre}</td>
-                                    <td className="text-muted">{command?.Book?.Genre?.name}</td>
-                                    <td>{command?.Book?.price}</td>
-                                    <td className="text-white bg-secondary text-center">{command?.Book?.storage}</td>
+                                    <td>{command?.book?.titre}</td>
+                                    <td className="text-muted">{command?.book?.Genre?.name}</td>
+                                    <td>{command?.book?.price}</td>
+                                    <td className="text-white bg-secondary text-center">{command?.book?.storage}</td>
                                     <td>X{command?.units}</td>
                                     <td className="
                                         text-center font-weight-bold text-white bg-info
-                                    ">{parseFloat(command?.Book?.price * command?.units)||0}</td>
+                                    ">{parseFloat(command?.book?.price * command?.units)||0}</td>
                                     <td className="text-center bg-light">
                                         <button style={{ all: 'unset', cursor: 'pointer'}} onClick={(e)=>{updateOrder(command?.id,e)}} ><img src="https://img.icons8.com/external-creatype-glyph-colourcreatype/28/7950F2/external-accept-basic-creatype-glyph-colourcreatype.png" alt="ok" /></button>
                                         <button style={{ all: 'unset', cursor: 'pointer'}} onClick={(e)=>{updateOrderStatus(command?.id,e)}}><img src="https://img.icons8.com/ios-glyphs/28/FA5252/cancel.png" alt="no"/></button>

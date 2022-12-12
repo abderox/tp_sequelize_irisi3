@@ -30,8 +30,8 @@ const Book = sequelize.define('Book',
         type: DataTypes.INTEGER,
         allowNull: true,
         unique: false,
-    }
-
+    },
+    editions : []
 },{
     tableName: 'Books',
     timestamps: true,

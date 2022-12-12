@@ -20,7 +20,7 @@ function Bookery() {
     const [data, setdata] = useState([]);
     const [search, setsearch] = useState([]);
     const [admin, setAdmin] = useState(false);
-    const imageURL = "http://localhost:8085/api/books/download/"
+    const imageURL = "http://localhost:8085/apiv2/books/download/";
 
 
     useEffect(() => {
@@ -29,13 +29,13 @@ function Bookery() {
         // check local storage user roles
         const user = JSON.parse(localStorage.getItem('admin'));
         if (user) {
-            if (user?.authorities?.includes("ROLE_ADMIN")) {
+            if (user?.roles?.includes("ROLE_ADMIN")) {
                 setAdmin(true);
             }
         }
 
         setloading(true);
-        axios.get('http://localhost:8085/api/books')
+        axios.get('http://localhost:8085/apiv2/books')
             .then(res => {
                 console.log(res)
 
@@ -59,7 +59,7 @@ function Bookery() {
 
     const refresh = (e) => {
         setloading(true);
-        axios.get('http://localhost:8085/api/books')
+        axios.get('http://localhost:8085/apiv2/books')
             .then(res => {
                 console.log("refresh")
                 setbooks(res.data.books);
@@ -78,7 +78,7 @@ function Bookery() {
             setdata(books)
         }
         else {
-            setdata(books.filter(book => book.Genre.name === keyword))
+            setdata(books.filter(book => book.genre.name === keyword))
         }
     }
 
@@ -95,7 +95,7 @@ function Bookery() {
 
     const handledelete = (e, id) => {
         e.preventDefault();
-        axios.delete(`http://localhost:8085/api/books/${id}`,
+        axios.delete(`http://localhost:8085/apiv2/books/${id}`,
             { headers: authHeader() })
             .then(res => {
                 refresh();
@@ -103,6 +103,7 @@ function Bookery() {
     }
 
     const handleOpenModalEdit = (e, id) => {
+        console.log(id)
         setShow_(id);
     }
 
@@ -218,7 +219,7 @@ function Bookery() {
                     }}>
                         {!loading && data.map((book) => (
 
-                            <div className="card p-3 m-1  " key={book?.id} style={{
+                            <div className="card p-3 m-1  " key={book?._id} style={{
                                 height: '32rem', fontSize: '13px', border: '2px solid #7209b7', background: '#ffffff',
                                 boxShadow: '26px 26px 52px #ededed, -26px -26px 52px #ffffff',
                                 maxWidth : '300px', 
@@ -239,13 +240,13 @@ function Bookery() {
                                         }}
                                     />
                                     <h5 className="card-title pt-2">{book?.titre || "no titre"} </h5>
-                                    <h6 className="card-subtitle  text-muted">{book?.Genre.name || "no genre"}</h6>
+                                    <h6 className="card-subtitle  text-muted">{book?.genre.name || "no genre"}</h6>
                                     <p className="card-text pt-1" style={{ color: 'green', fontWeight: 'bold' }}>{book?.price || "no price"} MAD</p>
                                     <p className="card-text pt-1" style={{ height: '5rem', overflowY: 'auto' }}>{book?.description || "no description"}</p>
                                     <div className="d-flex justify-content-center">
                                         {admin && <button style={{ all: 'unset', cursor: 'pointer' }}
-                                            onClick={(e) => { handledelete(e, book.id) }}
-                                            key={book.id + book?.titre}
+                                            onClick={(e) => { handledelete(e, book._id) }}
+                                            key={book._id + book?.titre}
                                         >
                                             <img src="https://img.icons8.com/color/28/000000/trash--v1.png" />
                                         </button>}
@@ -253,31 +254,31 @@ function Bookery() {
                                         {admin && <button style={{
                                             all: 'unset', cursor: 'pointer',
 
-                                        }} key={book.id + book.price}
-                                            onClick={(e) => { handleOpenModalEdit(e, book.id) }}
+                                        }} key={book._id + book._id }
+                                            onClick={(e) => { handleOpenModalEdit(e, book._id) }}
                                         >
                                             <img src="https://img.icons8.com/arcade/28/000000/pencil.png" />
                                         </button>}
                                         {
-                                            show_ === book.id && <EditModal id={book.id} key={book.id} handleCloseEdit={handleCloseEdit} />
+                                            show_ === book._id && <EditModal id={book._id} key={book._id +"145"} handleCloseEdit={handleCloseEdit} />
                                         }
                                         <button style={{
                                             all: 'unset', cursor: 'pointer',
 
-                                        }} key={book.id + book.price}
-                                            onClick={(e) => { handleOpenModalOrder(e, book.id) }}
+                                        }} key={book._id + book.price}
+                                            onClick={(e) => { handleOpenModalOrder(e, book._id) }}
                                         >
                                             <img src="https://img.icons8.com/fluency-systems-filled/32/7950F2/favorites.png" alt="save" />
                                         </button>
                                         {
                                             show__ === book.id && <OrderModel
                                                 title={book.titre}
-                                                key={book.id}
-                                                book={book.id}
+                                                key={book._id+book.titre}
+                                                book={book._id}
                                                 store={book.storage}
                                                 price_={book.price}
-                                                category={book?.Genre.name}
-                                                editions={book.Editions}
+                                                category={book?.genre.name}
+                                                editions={book.editions}
                                                 handleColseIt={handleColseIt} />
                                         }
                                     </div>

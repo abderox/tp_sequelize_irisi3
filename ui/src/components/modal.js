@@ -35,7 +35,7 @@ export default function InfoModal() {
             delete dataToSend.genre_
         }
 
-        await axios.post('http://localhost:8085/api/books/', dataToSend , { headers: authHeader() })
+        await axios.post('http://localhost:8085/apiv2/books/', dataToSend , { headers: authHeader() })
             .then(res => {
                 setloading(false);
                 handleClose();
@@ -51,7 +51,7 @@ export default function InfoModal() {
         if (
             file
         ) {
-            return await axios.post('http://localhost:8085/api/books/upload', formData, { headers: authHeader() })
+            return await axios.post('http://localhost:8085/apiv2/books/upload', formData, { headers: authHeader() })
         }
         else {
             return new Promise((resolve, reject) => {
@@ -100,7 +100,7 @@ export default function InfoModal() {
                 <Modal.Body>
 
                     <div className="justify-content-center d-block">
-                        <div classNam="row mt-1 p-1 ">
+                        <div className="row mt-1 p-1 ">
                             <div className="col">
                                 <input type="text" className
                                     ="form-control" placeholder="Title" name="titre"
@@ -112,7 +112,7 @@ export default function InfoModal() {
 
                             </div>
                         </div>
-                        <div classNam="row">
+                        <div className="row">
                             <div className="col">
                                 <textarea className="form-control mt-1 p-1" placeholder="
                                 Description" name="description" rows="3"
@@ -126,7 +126,7 @@ export default function InfoModal() {
                                     }</textarea>
                             </div>
                         </div>
-                        <div classNam="row">
+                        <div className="row">
                             <div className="col">
                                 <input type="text" className
                                     ="form-control mt-1 p-1" placeholder="Price" name="price"
@@ -148,7 +148,7 @@ export default function InfoModal() {
                                 />
                             </div>
                         </div>
-                        <div classNam="row">
+                        <div className="row">
                             <div className="col-12">
                                 <input type="text" className
                                     ="form-control mt-1 p-1" placeholder="Maison d'edition" name="maison_edition"
@@ -171,7 +171,7 @@ export default function InfoModal() {
 
                             </div>
                         </div>
-                        <div classNam="row">
+                        <div className="row">
                             <div className="col-12">
                                 <select
                                     className="form-select form-select-sm mt-1 p-1"
@@ -206,7 +206,7 @@ export default function InfoModal() {
                             
                            
                         </div>
-                        <div classNam="row">
+                        <div className="row">
                             <div className="col">
                             <input
                                 type="file"

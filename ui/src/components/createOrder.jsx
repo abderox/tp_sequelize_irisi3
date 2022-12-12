@@ -53,7 +53,7 @@ export default function OrderModel({ title, book, store, price_, category, editi
 
         console.log(dataToSend)
 
-        await axios.post('http://localhost:8085/api/books/order/', dataToSend)
+        await axios.post('http://localhost:8085/apiv2/books/order/', dataToSend)
             .then(res => {
                 setloading(false);
                 handleClose();
@@ -181,8 +181,8 @@ export default function OrderModel({ title, book, store, price_, category, editi
                                             >
                                                 <ListGroup horizontal>
 
-                                                    <ListGroup.Item style={{ width: '50%' }}>{edition.maison_edition}</ListGroup.Item>
-                                                    <ListGroup.Item style={{ width: '50%' }}>{edition.date_parutiion}</ListGroup.Item>
+                                                    <ListGroup.Item style={{ width: '50%' }}>{edition?.maison_edition}</ListGroup.Item>
+                                                    <ListGroup.Item style={{ width: '50%' }}>{edition?.date_parutiion}</ListGroup.Item>
                                                 </ListGroup>
                                             </ListGroup.Item>
                                         )

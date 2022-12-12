@@ -38,7 +38,7 @@ const Register = () => {
         // Send data to server
         console.log(data);
 
-        axios.post('http://localhost:8085/api/books/client/create', data)
+        axios.post('http://localhost:8085/apiv2/books/client/create', data)
             .then(res => {
                 console.log(res.data);
                 // save or overwrite to local storage

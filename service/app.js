@@ -3,11 +3,15 @@ const fileUpload = require('express-fileupload');
 const cors = require("cors");
 // const init = require("./api/init");
 const cookieSession = require("cookie-session");
-const sequelize = require("./api/config/db.seq");
-const initial =  require('./api/init/initSeq')
+// const sequelize = require("./api/config/db.seq");
+// const initial =  require('./api/init/initSeq')
+const connectDB = require("./api/config/db.gose");
+const initialGose =  require('./api/init/init.gose');
+const routesGose = require('./api/routes/routes.gose');
 // const plantsRoutes = require("./api/routes");
-const booksRoutes = require("./api/routes/routes.seq");
-const authRoutes = require("./api/routes/auth.seq")
+// const booksRoutes = require("./api/routes/routes.seq");
+// const authRoutes = require("./api/routes/auth.seq");
+const authRoutesGose = require("./api/routes/auth.gose");
 
 const app = express();
 
@@ -48,32 +52,41 @@ app.use((req, res, next) => {
 //     await init();
 // })();
  
+connectDB().then(()=>{
+  initialGose();
+  console.log("DB connected")
+}).catch(err=>console.log(err))
 
-(async () => {
-    await  sequelize.authenticate()
-    .then(() => {
-      console.log('Connected to database');
-      // sequelize.sync({ force: true }).then(() => {
-          sequelize.sync({ force: false }).then(() => {
-          console.log('Database synchronized');
-          initial();
-      }
-      );
-  }).catch((error) => {
-      console.error('Unable to connect to the database', error);
-  });
-})();
+// auth
+app.use("/apiv2/auth", authRoutesGose);
+// routes
+app.use("/apiv2/books", routesGose);
+
+// (async () => {
+//     await  sequelize.authenticate()
+//     .then(() => {
+//       console.log('Connected to database');
+//       // sequelize.sync({ force: true }).then(() => {
+//           sequelize.sync({ force: false }).then(() => {
+//           console.log('Database synchronized');
+//           initial();
+//       }
+//       );
+//   }).catch((error) => {
+//       console.error('Unable to connect to the database', error);
+//   });
+// })();
 
 
-app.get("/", (req, res) => {
-    res.json({ message: "testing routes" });
-});
+// app.get("/", (req, res) => {
+//     res.json({ message: "testing routes" });
+// });
 
-app.use("/api/auth", authRoutes);
+// app.use("/api/auth", authRoutes);
 
-app.use(fileUpload());
-// app.use("/api/books", plantsRoutes);
-app.use("/api/books", booksRoutes);
+// app.use(fileUpload());
+// // app.use("/api/books", plantsRoutes);
+// app.use("/api/books", booksRoutes);
 
 
 
