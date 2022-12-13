@@ -57,6 +57,9 @@ connectDB().then(()=>{
   console.log("DB connected")
 }).catch(err=>console.log(err))
 
+app.use(
+    fileUpload()
+)
 // auth
 app.use("/apiv2/auth", authRoutesGose);
 // routes

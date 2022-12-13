@@ -20,6 +20,8 @@ function Bookery() {
     const [data, setdata] = useState([]);
     const [search, setsearch] = useState([]);
     const [admin, setAdmin] = useState(false);
+    //mediaQuery
+    const [width, setWidth] = useState(window.matchMedia("(min-width: 768px)").matches);
     const imageURL = "http://localhost:8085/apiv2/books/download/";
 
 
@@ -55,6 +57,13 @@ function Bookery() {
     const handleOpenModal = () => {
         setShow(!show);
     }
+
+    // useeffect mediaquery changes
+    useEffect(() => {
+        const handler = e => setWidth(e.matches);
+        window.matchMedia("(min-width: 768px)").addListener(handler);
+    });
+    
 
 
     const refresh = (e) => {
@@ -205,7 +214,7 @@ function Bookery() {
                     <div className="col-12 p-3" style={{
 
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                        gridTemplateColumns: `${width? 'repeat(4, minmax(300px, 1fr))' : 'repeat(1, minmax(300px, 1fr))'}`,
                         gridGap: '1rem',
                         gridAutoRows: 'minmax(100px, auto)',
                         borderRadius: '5px',
@@ -222,7 +231,6 @@ function Bookery() {
                             <div className="card p-3 m-1  " key={book?._id} style={{
                                 height: '32rem', fontSize: '13px', border: '2px solid #7209b7', background: '#ffffff',
                                 boxShadow: '26px 26px 52px #ededed, -26px -26px 52px #ffffff',
-                                maxWidth : '300px', 
                                 borderRadius: '10px', padding: '20px'
                             }}>
                                 <div className="card-body text-center "
@@ -271,7 +279,7 @@ function Bookery() {
                                             <img src="https://img.icons8.com/fluency-systems-filled/32/7950F2/favorites.png" alt="save" />
                                         </button>
                                         {
-                                            show__ === book.id && <OrderModel
+                                            show__ === book._id && <OrderModel
                                                 title={book.titre}
                                                 key={book._id+book.titre}
                                                 book={book._id}

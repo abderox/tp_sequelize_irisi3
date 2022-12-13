@@ -29,6 +29,7 @@ router.get("/", getBooks);
 router.get("/:id", getBook);
 router.put("/:id", updateBook);
 router.delete("/:id", deleteBook);
+router.post("/upload", uploadProfileImage);
 router.post("/client/create", registerClient);
 router.post("/order", createOrder);
 router.get("/orders/all", getOrders);
@@ -36,7 +37,6 @@ router.put("/order/update/:id", updateOrder);
 router.put("/order/decline/:id", declineOrder);
 router.put("/order/decline/:id", declineOrder);
 router.put("/order/update/:id", updateOrder);
-router.post("/upload", uploadProfileImage);
 router.get("/download/:cover", downloadCover);
 
 

@@ -6,7 +6,7 @@ import Badge from 'react-bootstrap/Badge';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export default function Cart({handleShowCart,handleOrderSuccess}) {
+export default function Cart({ handleShowCart, handleOrderSuccess }) {
 
     const navigate = useNavigate();
     const [show, setShow] = useState(true);
@@ -14,6 +14,8 @@ export default function Cart({handleShowCart,handleOrderSuccess}) {
     const handleShow = () => setShow(true);
     const [data, setdata] = useState();
     const [loading, setloading] = useState(false);
+    // client from local storage
+    const [client, setclient] = useState(JSON.parse(localStorage.getItem('user')));
 
     const [dataToSend, setdataToSend] = useState({
         userId: 0,
@@ -24,25 +26,24 @@ export default function Cart({handleShowCart,handleOrderSuccess}) {
     useEffect(() => {
         //get data from local storage
         const data = JSON.parse(localStorage.getItem('cart_'));
-        if(
+        if (
             data
-        )
-        {
+        ) {
             setdata(data);
         }
-    },[])
+    }, [])
 
-    const handleRemoveFromLocalStorage = (index)=>{
+    const handleRemoveFromLocalStorage = (index) => {
         let data = JSON.parse(localStorage.getItem('cart_'));
         let data_ = JSON.parse(localStorage.getItem('cart'));
-        data.splice(index,1);
-        data_.splice(index,1);
+        data.splice(index, 1);
+        data_.splice(index, 1);
         localStorage.setItem('cart_', JSON.stringify(data));
         localStorage.setItem('cart', JSON.stringify(data_));
         setdata(data);
     }
 
-    const handlePay= async()=>{
+    const handlePay = async () => {
         // check user in local storage
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) {
@@ -50,17 +51,16 @@ export default function Cart({handleShowCart,handleOrderSuccess}) {
                 { state: { from: '/' } });
         }
 
-        dataToSend.userId = parseInt(
-            JSON.parse(localStorage.getItem('user'))[0].id
-        )
+        dataToSend.userId = JSON.parse(localStorage.getItem('user'))._id;
+
         dataToSend.date = new Date().toISOString().slice(0, 10)
 
-       // get data from cart localStorage
+        // get data from cart localStorage
         const data = JSON.parse(localStorage.getItem('cart'));
         dataToSend.books = data;
 
 
-        await axios.post('http://localhost:8085/api/books/order/', dataToSend)
+        await axios.post('http://localhost:8085/apiv2/books/order/', dataToSend)
             .then(res => {
                 setloading(false);
 
@@ -69,7 +69,7 @@ export default function Cart({handleShowCart,handleOrderSuccess}) {
                 localStorage.setItem('cart', JSON.stringify([]));
                 handleOrderSuccess();
                 handleClose();
-                
+
             })
     }
 
@@ -77,8 +77,8 @@ export default function Cart({handleShowCart,handleOrderSuccess}) {
         <>
 
 
-            <Modal show={show} centered 
-            onHide={handleClose}
+            <Modal show={show} centered
+                onHide={handleClose}
             >
                 <Modal.Header closeButton>
                     <Modal.Title>Cart {' '}<Badge pill bg="success">
@@ -89,6 +89,36 @@ export default function Cart({handleShowCart,handleOrderSuccess}) {
                     </Badge></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>These are  the books you have selected !
+                    {/* client information */}
+                    <div className="d-flex flex-row"
+
+                    >
+                        <div className=" p-2 bg-light text-warning"
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                marginTop: '10px',
+                                marginBottom: '10px',
+                            }}
+                        >
+                            Client  : <strong>{client.email}</strong>
+                        </div>
+
+                    </div>
+
+                    <div className="d-flex flex-row">
+
+                        <div className="p-2  bg-light text-warning"
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                marginTop: '10px',
+                                marginBottom: '10px',
+                            }}
+                        >
+                            Delivery address  : <strong>{client.address}</strong>
+                        </div>
+                    </div>
 
                     <ListGroup>
                         <ListGroup.Item>
@@ -100,7 +130,7 @@ export default function Cart({handleShowCart,handleOrderSuccess}) {
                                 <ListGroup.Item style={{ width: '20%' }} className="font-weight-bold text-danger">Units</ListGroup.Item>
                                 <ListGroup.Item style={{ width: '15%' }} className="font-weight-bold text-danger">-</ListGroup.Item>
 
-                                
+
                             </ListGroup>
                         </ListGroup.Item>
                         {data?.map((item, index) => (
@@ -113,7 +143,7 @@ export default function Cart({handleShowCart,handleOrderSuccess}) {
                                     <ListGroup.Item style={{ width: '15%' }} className="font-weight-bold text-danger cursor-pointer">
                                         <button style={{
                                             all: 'unset',
-                                        }} onClick={() => handleRemoveFromLocalStorage(index)}><img src="https://img.icons8.com/sf-regular-filled/32/FA5252/xbox-x.png"/></button>
+                                        }} onClick={() => handleRemoveFromLocalStorage(index)}><img src="https://img.icons8.com/sf-regular-filled/32/FA5252/xbox-x.png" /></button>
                                     </ListGroup.Item>
                                 </ListGroup>
                             </ListGroup.Item>
@@ -138,7 +168,7 @@ export default function Cart({handleShowCart,handleOrderSuccess}) {
                         Close
                     </Button>
                     <Button variant="success" onClick={handlePay}>
-                    {loading ? "Ordering..." : "Order"}
+                        {loading ? "Ordering..." : "Order"}
                     </Button>
                 </Modal.Footer>
             </Modal>

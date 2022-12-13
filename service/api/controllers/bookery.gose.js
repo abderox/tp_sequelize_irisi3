@@ -82,7 +82,7 @@ const updateBook = async (req, res) => {
     try {
         const { id } = req.params;
         console.log(id);
-        const { titre, price, description, couverture, storage, genre, editions } = req.body;
+        const { titre, price, description, couverture, genre, editions } = req.body;
         // create genre if not exists
         const genre_ = await createGenreIfNotExists(genre, res);
         // find book by objectId
@@ -93,7 +93,6 @@ const updateBook = async (req, res) => {
             book.price = price;
             book.description = description;
             book.couverture = couverture;
-            book.storage = storage;
             book.genre = genre_._id;
             console.log(genre_._id)
             // concat editions 

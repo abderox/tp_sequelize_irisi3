@@ -136,7 +136,7 @@ export default function OrderModel({ title, book, store, price_, category, editi
                 <Modal.Body>
 
                     <div className="justify-content-center d-block">
-                        <div classNam="row">
+                        <div className="row">
 
                             <div className="col-12">
                                 <label
@@ -157,7 +157,7 @@ export default function OrderModel({ title, book, store, price_, category, editi
 
                             </div>
                         </div>
-                        <div classNam=" p-1 " style={{ 
+                        <div className=" p-1 " style={{ 
                             marginTop:'10px',
                             marginBottom:'10px',
                             maxHeight:'200px',
@@ -191,7 +191,7 @@ export default function OrderModel({ title, book, store, price_, category, editi
                             </ListGroup>
 
                         </div>
-                        <div classNam="row mt-2 p-1 ">
+                        <div className="row mt-2 p-1 ">
                             <div className="col form-group">
                                 <label
                                     className=" mt-1 p-1"
@@ -216,7 +216,7 @@ export default function OrderModel({ title, book, store, price_, category, editi
                             >{leftstore} books will be left in store</small>
                         </div>
 
-                        <div classNam="row mt-2 mb-2 p-1 ">
+                        <div className="row mt-2 mb-2 p-1 ">
                             <div className="col">
                                 <label
                                     className=" mt-1 p-1"
@@ -236,7 +236,7 @@ export default function OrderModel({ title, book, store, price_, category, editi
 
                             </div>
                         </div>
-                        <div classNam="row mt-2 p-1 ">
+                        <div className="row mt-2 p-1 ">
                             <div className="col">
 
                                 <label
@@ -253,7 +253,7 @@ export default function OrderModel({ title, book, store, price_, category, editi
                                 </label>
                             </div>
                         </div>
-                        <div classNam="row mt-2 p-1 ">
+                        <div className="row mt-2 p-1 ">
 
 
                             <div className="col"

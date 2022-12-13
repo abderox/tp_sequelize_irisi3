@@ -34,7 +34,15 @@ export default function InfoModal() {
             dataToSend.genre = dataToSend.genre_
             delete dataToSend.genre_
         }
+        dataToSend.edition={}
+        dataToSend.edition.maison_edition = dataToSend.maison_edition;
+        dataToSend.edition.date_parutiion = dataToSend.edition_date;
 
+        delete dataToSend.maison_edition;
+        delete dataToSend.edition_date;
+
+        console.log(dataToSend)
+        
         await axios.post('http://localhost:8085/apiv2/books/', dataToSend , { headers: authHeader() })
             .then(res => {
                 setloading(false);

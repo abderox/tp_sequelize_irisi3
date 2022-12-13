@@ -26,6 +26,18 @@ function Commands() {
             })
     }, [])
 
+
+    // refresh 
+    const refresh = () => {
+        axios.get('http://localhost:8085/apiv2/books/orders/all',
+        { headers: authHeader() })
+            .then(res => {
+                setCommands(res.data);
+                console.log(res.data);
+            })
+    }   
+
+
     const updateOrderStatus = (id,e) => {
         console.log(id);
         
@@ -74,7 +86,14 @@ function Commands() {
         <div className="container" style={{
             minHeight : "70vh"
         }}>
-            <h1 className="text-center m-3" style={{color: '#7950F2'}}>Orders</h1>
+            <h1 className="text-center m-3 display-3" style={{color: '#7950F2'}}>Orders</h1>
+            <button
+            className="mb-2" 
+            style={{ all: 'unset', cursor: 'pointer' }}
+                            onClick={
+                                refresh
+                            }>
+                            <img src="https://img.icons8.com/ios-filled/36/7950F2/update-left-rotation.png" alt="reset" /></button>
             {/* orders table */}
             <div className="table-responsive">
                 <table className="table table-striped table-sm">
@@ -102,7 +121,7 @@ function Commands() {
                                     <td>{command?.user?.email}</td>
                                     <td>{command?.user?.address}</td>
                                     <td>{command?.date}</td>
-                                    <td><span className={`badge ${map.get(command.status)}`}>{command?.status}</span></td>
+                                    <td><span className={`badge ${map.get(command?.status?.toUpperCase())}`}>{command?.status?.toUpperCase()}</span></td>
                                     <td>{command?.book?.titre}</td>
                                     <td className="text-muted">{command?.book?.Genre?.name}</td>
                                     <td>{command?.book?.price}</td>

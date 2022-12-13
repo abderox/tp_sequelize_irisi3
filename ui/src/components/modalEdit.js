@@ -241,7 +241,7 @@ export default function EditModal({ id, handleCloseEdit }) {
                                                         ...dataToSend,
                                                         editions: [...dataToSend.editions, {
                                                             maison_edition: dataToSend.publisher,
-                                                            date_parution: dataToSend.publisher_date
+                                                            date_parutiion: dataToSend.publisher_date
                                                         }]
                                                     })
                                                 }}
@@ -258,15 +258,31 @@ export default function EditModal({ id, handleCloseEdit }) {
                                             >
                                                 <ListGroup horizontal>
 
-                                                    <ListGroup.Item style={{ width: '50%' }}>{edition.maison_edition}</ListGroup.Item>
-                                                    <ListGroup.Item style={{ width: '50%' }}>{edition.date_parution}</ListGroup.Item>
+                                                    <ListGroup.Item style={{ width: '45%' }}>{edition.maison_edition}</ListGroup.Item>
+                                                    <ListGroup.Item style={{ width: '45%' }}>{edition.date_parutiion}</ListGroup.Item>
+                                                     {/* delete */}
+                                                     <ListGroup.Item style={{ width: '15%', cursor: 'pointer' }}>
+                                                        <button
+                                                            style={{
+                                                                all: 'unset', cursor: 'pointer'
+                                                            }}
+                                                            onClick={() => {
+                                                                setdataToSend({
+                                                                    ...dataToSend,
+                                                                    editions: dataToSend.editions.filter((edition, indexEdition) => {
+                                                                        return indexEdition !== index
+                                                                    })
+                                                                })
+                                                            }}
+                                                        ><img src="https://img.icons8.com/flat-round/32/null/minus.png" /></button> 
+                                                    </ListGroup.Item>
                                                 </ListGroup>
                                             </ListGroup.Item>
                                         )
                                     })
                                 }
                                 {
-                                    data.Editions?.map((edition, index) => {
+                                    data.editions?.map((edition, index) => {
                                         return (
                                             <ListGroup.Item
                                                 key={index}
@@ -276,6 +292,7 @@ export default function EditModal({ id, handleCloseEdit }) {
 
                                                     <ListGroup.Item style={{ width: '50%', color: 'blue' }}>{edition.maison_edition}</ListGroup.Item>
                                                     <ListGroup.Item style={{ width: '50%', color: 'blue' }}>{edition.date_parutiion}</ListGroup.Item>
+                                                   
                                                 </ListGroup>
                                             </ListGroup.Item>
                                         )
