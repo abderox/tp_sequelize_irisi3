@@ -17,6 +17,25 @@ Bookery is a simple, easy to use, and free book management system. It is designe
 - Manage book categories
 - Manage book orders
   
+### Admin registration
+
+- To register as an admin .
+- Api link :
+    - http://localhost:8085/apiv2/auth/signup
+``` json
+{
+  "phone"  : "0641768979",
+  "email" : "admin2@gmail.com",
+  "nom": "addazd",
+  "prenom" : "aazaa",
+  "roles" :["admin"],
+  "username" : "admin2",
+  "password" : "896618Google"
+
+}
+
+```
+
 ### Demo
 
 _some screenshots_
