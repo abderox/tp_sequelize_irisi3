@@ -17,6 +17,9 @@ Bookery is a simple, easy to use, and free book management system. It is designe
 - Manage book categories
 - Manage book orders
   
+
+
+### mongo db files contains .gose.js
 ### Admin registration
 
 - To register as an admin .

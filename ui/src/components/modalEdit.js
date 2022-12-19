@@ -5,6 +5,7 @@ import Badge from 'react-bootstrap/Badge';
 import axios from 'axios';
 import ListGroup from 'react-bootstrap/ListGroup';
 import authHeader from '../api/authHeader';
+import {API_URL} from '../api/global-constants';
 
 
 export default function EditModal({ id, handleCloseEdit }) {
@@ -53,7 +54,7 @@ export default function EditModal({ id, handleCloseEdit }) {
         dataToSend.price = parseFloat(dataToSend.price)
         console.log(dataToSend)
 
-        await axios.put('http://localhost:8085/apiv2/books/' + id, dataToSend, { headers: authHeader() })
+        await axios.put(API_URL+'/apiv2/books/' + id, dataToSend, { headers: authHeader() })
 
     }
 
@@ -64,7 +65,7 @@ export default function EditModal({ id, handleCloseEdit }) {
         if (
             file
         ) {
-            return await axios.post('http://localhost:8085/apiv2/books/upload', formData, { headers: authHeader() })
+            return await axios.post(API_URL+'/apiv2/books/upload', formData, { headers: authHeader() })
         }
         else {
             return new Promise((resolve, reject) => {

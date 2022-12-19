@@ -1,0 +1,55 @@
+version: '3'
+services:
+    mongo:
+        container_name : 'mongo-db'
+        image: mongo:4.4-bionic
+        ports:
+            - "27017:27017"
+        restart: always
+        volumes:
+            - ./mongodb/data:/data/db
+        networks:
+            - bookery-app
+    service:
+        container_name : 'service-api'
+        build:
+            context: 
+                ./service/
+            dockerfile: Dockerfile
+        image : 'abderoxdocker/bookery-backend-prod'
+        ports:
+            - "8085:8085"
+        depends_on:
+            - mongo
+        networks:
+            -  bookery-app
+        volumes:
+          - ./service:/usr/src/app/service
+          - /usr/src/app/service/node_modules
+        
+
+    ui:
+        container_name : 'ui-client'
+        build: 
+            context: ./ui/
+            dockerfile: Dockerfile
+        image: abderoxdocker/bookery-front-prod
+        ports:
+            - "8888:80"
+            - "443:443"
+        depends_on:
+            - service
+        networks:
+            - bookery-app
+        volumes:
+            - ./ui:/usr/src/app
+            - /usr/src/app/node_modules
+
+networks:
+    bookery-app:
+      driver: bridge
+
+volumes:
+    mongodb-data:
+        driver: local
+  

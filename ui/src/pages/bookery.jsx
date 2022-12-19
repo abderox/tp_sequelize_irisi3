@@ -6,6 +6,8 @@ import EditModal from '../components/modalEdit'
 import InfoModal from '../components/modal';
 import OrderModel from '../components/createOrder';
 import authHeader from '../api/authHeader';
+import {API_URL} from '../api/global-constants';
+
 
 
 
@@ -22,7 +24,7 @@ function Bookery() {
     const [admin, setAdmin] = useState(false);
     //mediaQuery
     const [width, setWidth] = useState(window.matchMedia("(min-width: 768px)").matches);
-    const imageURL = "http://localhost:8085/apiv2/books/download/";
+    const imageURL = API_URL+ "/apiv2/books/download/";
 
 
     useEffect(() => {
@@ -37,7 +39,7 @@ function Bookery() {
         }
 
         setloading(true);
-        axios.get('http://localhost:8085/apiv2/books')
+        axios.get(API_URL+'/apiv2/books')
             .then(res => {
                 console.log(res)
 
@@ -68,7 +70,7 @@ function Bookery() {
 
     const refresh = (e) => {
         setloading(true);
-        axios.get('http://localhost:8085/apiv2/books')
+        axios.get(API_URL+'/apiv2/books')
             .then(res => {
                 console.log("refresh")
                 setbooks(res.data.books);

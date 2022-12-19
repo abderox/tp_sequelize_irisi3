@@ -4,6 +4,7 @@ import { Modal, Button } from 'react-bootstrap';
 import Badge from 'react-bootstrap/Badge';
 import axios from 'axios';
 import authHeader from '../api/authHeader';
+import {API_URL} from '../api/global-constants';
 
 export default function InfoModal() {
 
@@ -43,7 +44,7 @@ export default function InfoModal() {
 
         console.log(dataToSend)
         
-        await axios.post('http://localhost:8085/apiv2/books/', dataToSend , { headers: authHeader() })
+        await axios.post(API_URL+'/apiv2/books/', dataToSend , { headers: authHeader() })
             .then(res => {
                 setloading(false);
                 handleClose();
@@ -59,7 +60,7 @@ export default function InfoModal() {
         if (
             file
         ) {
-            return await axios.post('http://localhost:8085/apiv2/books/upload', formData, { headers: authHeader() })
+            return await axios.post(API_URL+'/apiv2/books/upload', formData, { headers: authHeader() })
         }
         else {
             return new Promise((resolve, reject) => {

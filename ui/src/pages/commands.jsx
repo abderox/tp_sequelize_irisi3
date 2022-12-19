@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import authHeader from '../api/authHeader';
+import {API_URL} from '../api/global-constants';
 
 function Commands() {
 
@@ -18,7 +19,7 @@ function Commands() {
     const [commands, setCommands] = React.useState([]);
 
     React.useEffect(() => {
-        axios.get('http://localhost:8085/apiv2/books/orders/all', 
+        axios.get(API_URL+'/apiv2/books/orders/all', 
         { headers: authHeader() })
             .then(res => {
                 setCommands(res.data);
@@ -29,7 +30,7 @@ function Commands() {
 
     // refresh 
     const refresh = () => {
-        axios.get('http://localhost:8085/apiv2/books/orders/all',
+        axios.get(API_URL+'/apiv2/books/orders/all',
         { headers: authHeader() })
             .then(res => {
                 setCommands(res.data);
@@ -42,7 +43,7 @@ function Commands() {
         console.log(id);
         
         
-        axios.put('http://localhost:8085/apiv2/books/order/decline/' + id, 
+        axios.put(API_URL+'/apiv2/books/order/decline/' + id, 
         { headers: authHeader() })
             .then(res => {
                 // change command status to declined 
@@ -59,7 +60,7 @@ function Commands() {
 
     const updateOrder = (id) =>{
         console.log(id);
-        axios.put('http://localhost:8085/apiv2/books/order/update/' + id)
+        axios.put(API_URL+'/apiv2/books/order/update/' + id)
             .then(res => {
                 // change command status to declined 
                 setCommands(commands.map(command => {

@@ -5,6 +5,7 @@ import Badge from 'react-bootstrap/Badge';
 import ListGroup from 'react-bootstrap/ListGroup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import {API_URL} from '../api/global-constants';
 
 
 export default function OrderModel({ title, book, store, price_, category, editions, handleColseIt }) {
@@ -53,7 +54,7 @@ export default function OrderModel({ title, book, store, price_, category, editi
 
         console.log(dataToSend)
 
-        await axios.post('http://localhost:8085/apiv2/books/order/', dataToSend)
+        await axios.post(API_URL+'/apiv2/books/order/', dataToSend)
             .then(res => {
                 setloading(false);
                 handleClose();

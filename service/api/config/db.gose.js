@@ -6,7 +6,7 @@ const connectionParams = {
   };
 const connectDB = async () =>
 {
-    const conn = await mongoose.connect("mongodb://localhost:27017/bookery",connectionParams);
+    const conn = await mongoose.connect("mongodb://mongo:27017/bookery",connectionParams);
     console.log('MongoDB connected ');
 }
 

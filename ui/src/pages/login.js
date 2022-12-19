@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import {API_URL} from '../api/global-constants';
+
 
 const Login = () => {
 
@@ -35,7 +37,7 @@ const Login = () => {
         // Send data to server
         console.log(data);
 
-        axios.post('http://localhost:8085/apiv2/auth/signin', data)
+        axios.post(API_URL+'/apiv2/auth/signin', data)
             .then(res => {
                 console.log(res.data);
                 // save or overwrite to local storage
