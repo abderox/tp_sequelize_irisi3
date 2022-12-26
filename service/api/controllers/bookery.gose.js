@@ -187,7 +187,16 @@ const createOrder = async (req, res) => {
 const getOrders = async (req, res) => {
     try {
         const orders = await Order.find().populate('user').populate('book');
-        res.status(200).json(orders);
+        //populate genre for books
+        Promise.all(orders.map(async (order) => {
+            const book = await Book.findById(order.book._id).populate('genre');
+            order.book.genre = book.genre;
+        })).then(
+            ()=>{
+                res.status(200).json(orders);
+            }
+        )
+        
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -197,7 +206,7 @@ const updateOrder = async (req, res) => {
     try {
         console.log(req.params.id);
         const orderId = req.params.id;
-        const order = await Order.findById(orderId);
+        const order = await Order.findById(orderId)
         console.log("🚀 ~ file: bookery.gose.js:197 ~ updateOrder ~ order", order)
         
         if (order) {

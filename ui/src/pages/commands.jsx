@@ -43,12 +43,12 @@ function Commands() {
         console.log(id);
         
         
-        axios.put(API_URL+'/apiv2/books/order/decline/' + id, 
+        axios.put(API_URL+'/apiv2/books/order/decline/' + id, {},
         { headers: authHeader() })
             .then(res => {
                 // change command status to declined 
                 setCommands(commands.map(command => {
-                    if(command.id === id){
+                    if(command._id === id){
                         command.status = 'DECLINED';
                     }
                     return command;
@@ -60,11 +60,12 @@ function Commands() {
 
     const updateOrder = (id) =>{
         console.log(id);
-        axios.put(API_URL+'/apiv2/books/order/update/' + id)
+        axios.put(API_URL+'/apiv2/books/order/update/' + id, {},
+        { headers: authHeader() })
             .then(res => {
                 // change command status to declined 
                 setCommands(commands.map(command => {
-                    if(command.id === id){
+                    if(command._id === id){
                         command.status = 'PROCESSING';
                     }
                     return command;
@@ -73,7 +74,7 @@ function Commands() {
             }).catch((ee) => {
                 console.log(ee);
                 setCommands(commands.map(command => {
-                    if(command.id === id){
+                    if(command._id === id){
                         command.status = 'RUNOUT';
                     }
                     return command;
@@ -118,13 +119,13 @@ function Commands() {
                         {
                             commands.map((command, index) => (
                                 <tr key={index}>
-                                    <td>{command?.id}</td>
+                                    <td>{command._id}</td>
                                     <td>{command?.user?.email}</td>
                                     <td>{command?.user?.address}</td>
                                     <td>{command?.date}</td>
                                     <td><span className={`badge ${map.get(command?.status?.toUpperCase())}`}>{command?.status?.toUpperCase()}</span></td>
                                     <td>{command?.book?.titre}</td>
-                                    <td className="text-muted">{command?.book?.Genre?.name}</td>
+                                    <td className="text-muted">{command?.book?.genre?.name}</td>
                                     <td>{command?.book?.price}</td>
                                     <td className="text-white bg-secondary text-center">{command?.book?.storage}</td>
                                     <td>X{command?.units}</td>
@@ -132,8 +133,8 @@ function Commands() {
                                         text-center font-weight-bold text-white bg-info
                                     ">{parseFloat(command?.book?.price * command?.units)||0}</td>
                                     <td className="text-center bg-light">
-                                        <button style={{ all: 'unset', cursor: 'pointer'}} onClick={(e)=>{updateOrder(command?.id,e)}} ><img src="https://img.icons8.com/external-creatype-glyph-colourcreatype/28/7950F2/external-accept-basic-creatype-glyph-colourcreatype.png" alt="ok" /></button>
-                                        <button style={{ all: 'unset', cursor: 'pointer'}} onClick={(e)=>{updateOrderStatus(command?.id,e)}}><img src="https://img.icons8.com/ios-glyphs/28/FA5252/cancel.png" alt="no"/></button>
+                                        <button style={{ all: 'unset', cursor: 'pointer'}} onClick={(e)=>{updateOrder(command._id,e)}} ><img src="https://img.icons8.com/external-creatype-glyph-colourcreatype/28/7950F2/external-accept-basic-creatype-glyph-colourcreatype.png" alt="ok" /></button>
+                                        <button style={{ all: 'unset', cursor: 'pointer'}} onClick={(e)=>{updateOrderStatus(command._id,e)}}><img src="https://img.icons8.com/ios-glyphs/28/FA5252/cancel.png" alt="no"/></button>
                                     </td>
                                 </tr>
                             ))

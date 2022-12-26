@@ -1,10 +1,7 @@
 build:
 	docker build -t abderoxdocker/bookery-front --no-cache . 
 build-local:
-	docker build  \
-	  -t abderoxdocker/bookery-front-prod:local \
-	  --build-arg BASE_URL=http://localhost:8085 \ 
-	  -f Dockerfile.production .
+	docker build  -t abderoxdocker/bookery-front-prod:local --build-arg BASE_URL=http://localhost:8085  NGINX_PATH=nginx.conf -f Dockerfile.production .
 
 build-prod:
-	docker build -t abderoxdocker/bookery-front-prod:prod -f Dockerfile.prod .
+	docker build -t abderoxdocker/bookery-front-prod:prod --build-arg NGINX_PATH=prod/nginx.conf -f Dockerfile.production .

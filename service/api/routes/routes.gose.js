@@ -20,23 +20,22 @@ const {
 // import middlewares
 const { 
     verifyToken,
-    isAdmin,
-    isBuyer 
-} = require("../middlewares/auth");
+    isAdmin
+} = require("../middlewares/auth.gose");
 
-router.post("/", createBook);
+router.post("/",[verifyToken,isAdmin], createBook);
 router.get("/", getBooks);
 router.get("/:id", getBook);
-router.put("/:id", updateBook);
-router.delete("/:id", deleteBook);
-router.post("/upload", uploadProfileImage);
+router.put("/:id",[verifyToken,isAdmin], updateBook);
+router.delete("/:id",[verifyToken,isAdmin],deleteBook);
+router.post("/upload",[verifyToken,isAdmin], uploadProfileImage);
 router.post("/client/create", registerClient);
 router.post("/order", createOrder);
 router.get("/orders/all", getOrders);
-router.put("/order/update/:id", updateOrder);
-router.put("/order/decline/:id", declineOrder);
-router.put("/order/decline/:id", declineOrder);
-router.put("/order/update/:id", updateOrder);
+router.put("/order/update/:id",[verifyToken,isAdmin], updateOrder);
+router.put("/order/decline/:id",[verifyToken,isAdmin], declineOrder);
+// router.put("/order/decline/:id", declineOrder);
+// router.put("/order/update/:id", updateOrder);
 router.get("/download/:cover", downloadCover);
 
 

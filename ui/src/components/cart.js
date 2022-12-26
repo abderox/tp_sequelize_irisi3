@@ -15,7 +15,7 @@ export default function Cart({ handleShowCart, handleOrderSuccess }) {
     const [data, setdata] = useState();
     const [loading, setloading] = useState(false);
     // client from local storage
-    const [client, setclient] = useState(JSON.parse(localStorage.getItem('user')));
+    const [client, setclient] = useState(null);
 
     const [dataToSend, setdataToSend] = useState({
         userId: 0,
@@ -24,6 +24,8 @@ export default function Cart({ handleShowCart, handleOrderSuccess }) {
     });
 
     useEffect(() => {
+        // get user from local storage
+        setclient(JSON.parse(localStorage.getItem('user')));
         //get data from local storage
         const data = JSON.parse(localStorage.getItem('cart_'));
         if (
@@ -47,8 +49,7 @@ export default function Cart({ handleShowCart, handleOrderSuccess }) {
         // check user in local storage
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) {
-            navigate('/register',
-                { state: { from: '/' } });
+            navigate('/register');
         }
 
         dataToSend.userId = JSON.parse(localStorage.getItem('user'))._id;
@@ -101,7 +102,7 @@ export default function Cart({ handleShowCart, handleOrderSuccess }) {
                                 marginBottom: '10px',
                             }}
                         >
-                            Client  : <strong>{client.email}</strong>
+                            Client  : <strong>{client !=null ? client?.email : "Not registered"}</strong>
                         </div>
 
                     </div>
@@ -116,7 +117,7 @@ export default function Cart({ handleShowCart, handleOrderSuccess }) {
                                 marginBottom: '10px',
                             }}
                         >
-                            Delivery address  : <strong>{client.address}</strong>
+                            Delivery address  : <strong>{client !=null ? client?.address : "Not registered"}</strong>
                         </div>
                     </div>
 

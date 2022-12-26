@@ -36,13 +36,10 @@ export default function OrderModel({ title, book, store, price_, category, editi
         // check user in local storage
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) {
-            navigate('/register',
-                { state: { from: '/' } });
+            navigate('/register');
         }
 
-        dataToSend.userId = parseInt(
-            JSON.parse(localStorage.getItem('user'))[0].id
-        )
+        dataToSend.userId = JSON.parse(localStorage.getItem('user'))._id
         dataToSend.date = new Date().toISOString().slice(0, 10)
 
         let obj = {}
